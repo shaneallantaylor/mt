@@ -1,7 +1,7 @@
 {
-  "name": "nextjs-mongodb-app",
+  "name": "MeganThompson.com - 2021",
   "version": "1.0.0",
-  "description": "Full fledged app made with Next.JS and MongoDB",
+  "description": "Portfolio Web App",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -11,16 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hoangvvo/nextjs-mongodb-app.git"
+    "url": "git+https://github.com/shaneallantaylor/mt"
   },
-  "author": "Hoang Vo (https://hoangvvo.com)",
+  "author": "Shane Taylor",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hoangvvo/nextjs-mongodb-app/issues"
-  },
-  "homepage": "https://github.com/hoangvvo/nextjs-mongodb-app#readme",
+  "homepage": "meganthompson.com",
   "dependencies": {
-    "@sendgrid/mail": "^7.4.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.23.0",
     "connect-mongo": "^3.2.0",
