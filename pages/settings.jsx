@@ -20,15 +20,27 @@ const ProfileSection = () => {
     if (isUpdating) return;
     setIsUpdating(true);
     const formData = new FormData();
-    if (profilePictureRef.current.files[0]) { formData.append('profilePicture', profilePictureRef.current.files[0]); }
+    if (profilePictureRef.current.files.length === 1) {
+      formData.append('profilePicture', profilePictureRef.current.files[0]);
+    } else if (profilePictureRef.current.files.length >= 2) {
+      for (let file of profilePictureRef.current.files) {
+        formData.append('pics', file)
+      }
+    }
     formData.append('name', nameRef.current.value);
     formData.append('bio', bioRef.current.value);
+    console.log('profilePictureRef.current.files IS', profilePictureRef.current.files);
+    console.log('and now, just before the call to PATCH /api/user, this is the formData', formData);
+    for (let pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    };
     const res = await fetch('/api/user', {
       method: 'PATCH',
       body: formData,
     });
     if (res.status === 200) {
       const userData = await res.json();
+      console.log('userData in the response is', userData);
       mutate({
         user: {
           ...user,
@@ -123,6 +135,7 @@ const ProfileSection = () => {
               name="avatar"
               accept="image/png, image/jpeg"
               ref={profilePictureRef}
+              multiple
             />
           </label>
           <button disabled={isUpdating} type="submit">Save</button>

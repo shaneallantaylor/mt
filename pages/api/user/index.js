@@ -30,13 +30,15 @@ handler.get(async (req, res) => {
   res.json({ user: u });
 });
 
-handler.patch(upload.single('profilePicture'), async (req, res) => {
+handler.patch(upload.array('pics'), async (req, res) => {
   if (!req.user) {
     req.status(401).end();
     return;
   }
+  
   let profilePicture;
   if (req.file) {
+    // console.log('we got ourselves a file! Here is ther req:', req);
     const image = await cloudinary.uploader.upload(req.file.path, {
       width: 512,
       height: 512,
