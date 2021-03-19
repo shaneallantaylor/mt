@@ -3,6 +3,7 @@
 Built with Next.js, MongoDB, and React.
 
 ## Dev To Do's
+- [ ] Add in Keystone!
 - [x] Build Gallery API functionality
 - [x] Test Gallery API functionality with Postman
 - [ ] Add isPublic to gallery data

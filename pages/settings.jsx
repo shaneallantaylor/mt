@@ -33,6 +33,10 @@ const ProfileSection = () => {
     console.log('and now, just before the call to PATCH /api/user, this is the formData', formData);
     for (let pair of formData.entries()) {
       console.log(pair[0]+ ', ' + pair[1]); 
+      if (pair[0] === 'profilePicture') {
+        console.log(pair[1].name)
+
+      }
     };
     const res = await fetch('/api/user', {
       method: 'PATCH',
