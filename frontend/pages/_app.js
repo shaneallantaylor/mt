@@ -1,6 +1,5 @@
-import React from 'react';
 import Head from 'next/head';
-import Layout from '@/components/layout';
+import Layout from '../components/Layout';
 
 export default function MyApp({ Component, pageProps }) {
   return (
