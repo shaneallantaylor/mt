@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 
 export default function IndexPage({ children }) {
-  return (
-    <>
-      <p>hey there</p>
-      <div>{children}</div>
-    </>
-  );
+  return <p>home</p>;
 }
 
 IndexPage.propTypes = {
