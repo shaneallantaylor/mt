@@ -8,6 +8,11 @@
     "dev": "keystone-next",
     "seed-data": "keystone-next --seed-data"
   },
+  "eslintConfig": {
+    "extends": [
+      "wesbos"
+    ]
+  },
   "babel": {
     "presets": [
       [
