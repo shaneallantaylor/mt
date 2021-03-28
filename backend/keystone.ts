@@ -8,6 +8,7 @@ import {
 import { User } from './schemas/User';
 import { Photo } from './schemas/Photo';
 import { Gallery } from './schemas/Gallery';
+import { insertSeedData } from './seed-data';
 
 const databaseUrl = process.env.MONGODB_URI;
 
@@ -38,6 +39,12 @@ export default withAuth(
       adapter: 'mongoose',
       url: databaseUrl,
       // TODO: Add data seeding here
+      async onConnect(keystone) {
+        console.log('connected to the db');
+        if (process.argv.includes('--seed-data')) {
+          await insertSeedData(keystone);
+        }
+      },
     },
     lists: createSchema({
       // schema items go here
