@@ -1,17 +1,6 @@
 import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 
-export const ALL_PHOTOS_QUERY = gql`
-  query ALL_PHOTOS_QUERY {
-    allPhotos {
-      description
-      name
-      image {
-        publicUrlTransformed
-      }
-    }
-  }
-`;
+import { ALL_PHOTOS_QUERY } from './Catalog';
 
 export default function Gallery() {
   const { data, error, loading } = useQuery(ALL_PHOTOS_QUERY);
