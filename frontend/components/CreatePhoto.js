@@ -1,26 +1,8 @@
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import useForm from '../lib/useForm';
-import { ALL_PHOTOS_QUERY } from './Gallery';
-
-const CREATE_PHOTO_MUTATION = gql`
-  mutation CREATE_PHOTO_MUTATION(
-    #which variables get passed in!
-    $name: String!
-    $description: String!
-    $image: Upload!
-  ) {
-    createPhoto(
-      data: { name: $name, description: $description, image: $image }
-    ) {
-      id
-      description
-      image {
-        publicUrlTransformed
-      }
-    }
-  }
-`;
+import { ALL_PHOTOS_QUERY } from '../graphql/queries';
+import { CREATE_PHOTO_MUTATION } from '../graphql/mutations';
 
 export default function CreatePhoto() {
   const { inputs, handleChange } = useForm({

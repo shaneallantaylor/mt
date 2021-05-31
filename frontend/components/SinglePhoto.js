@@ -1,22 +1,10 @@
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Head from 'next/head';
-
-const SINGLE_PHOTO_QUERY = gql`
-  query SINGLE_PHOTO_QUERY($id: ID!) {
-    Photo(where: { id: $id }) {
-      name
-      description
-      altText
-      image {
-        publicUrlTransformed
-      }
-    }
-  }
-`;
+import { PHOTO_QUERY } from '../graphql/queries';
 
 export default function SinglePhoto({ id }) {
-  const { data, loading, error } = useQuery(SINGLE_PHOTO_QUERY, {
+  const { data, loading, error } = useQuery(PHOTO_QUERY, {
     variables: {
       id,
     },

@@ -1,27 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { resetIdCounter, useCombobox } from 'downshift';
-import gql from 'graphql-tag';
 import debounce from 'lodash.debounce';
-
-const SEARCH_PHOTOS_QUERY = gql`
-  query SEARCH_PHOTOS_QUERY($searchTerm: String!) {
-    results: allPhotos(
-      where: {
-        OR: [
-          { name_contains_i: $searchTerm }
-          { description_contains_i: $searchTerm }
-        ]
-      }
-    ) {
-      id
-      description
-      name
-      image {
-        publicUrlTransformed
-      }
-    }
-  }
-`;
+import { SEARCH_PHOTOS_QUERY } from '../graphql/queries';
 
 export default function Search() {
   const [findPhotos, { loading, data, error }] = useLazyQuery(
