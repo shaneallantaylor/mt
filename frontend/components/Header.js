@@ -7,7 +7,7 @@ const HeaderStyles = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  background: rgb(210 210 210 / 30%);
+  background: hsl(0 0% 0% / 90%);
 `;
 
 const Logo = styled.h1`
@@ -18,7 +18,9 @@ export default function Header() {
   return (
     <HeaderStyles>
       <Logo>
-        <Link href="/">Megan Thompson</Link>
+        <Link href="/">
+          <img src="/mt-white.png" alt="Megan Thompson" />
+        </Link>
       </Logo>
       <Nav />
     </HeaderStyles>

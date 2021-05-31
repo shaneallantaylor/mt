@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useQuery } from '@apollo/client';
+import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 
 const NavStyles = styled.nav`
   a {
@@ -8,12 +10,17 @@ const NavStyles = styled.nav`
 `;
 
 export default function Nav() {
+  const { data, error, loading } = useQuery(ALL_PUBLISHED_GALLERIES_QUERY);
+  if (loading) return <h2>WE LOADING...</h2>;
+  if (error) return <h2>Oh no erro</h2>;
+
   return (
     <NavStyles>
-      <Link href="/gallery/1">Gallery 1</Link>
-      <Link href="/gallery/2">Gallery 2</Link>
-      <Link href="/gallery/3">Gallery 3</Link>
-      <Link href="/gallery/4">Gallery 4</Link>
+      {data.allGalleries.map((gallery) => (
+        <Link key={gallery.id} href={`/gallery/${gallery.name}`}>
+          {gallery.name}
+        </Link>
+      ))}
       <Link href="/about">About</Link>
     </NavStyles>
   );

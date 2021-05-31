@@ -25,8 +25,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   a {
-    color: var(--white);
-    text-decoration: none;
+    color: red;
   }
 
   a:hover {
@@ -41,6 +40,7 @@ const GlobalStyles = createGlobalStyle`
 const MainStyles = styled.main`
   max-width: 100vw;
   overflow-x: hidden;
+  padding: 20px;
 `;
 
 export default function Layout({ children }) {
