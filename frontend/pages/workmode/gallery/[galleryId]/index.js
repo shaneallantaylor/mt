@@ -54,8 +54,7 @@ export default function EditGalleryPage({ query }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // get things we need from the refs
-    // refs baby
+
     const galleryName = nameInput.current.value;
     const galleryDescription = descriptionInput.current.value;
     const photosToConnect = photoList.map((photo) => ({
@@ -67,16 +66,7 @@ export default function EditGalleryPage({ query }) {
         order: idx,
       },
     }));
-    // get the photos
-    // fire updateGallery
-    console.log('photoList inside handleSubmit is', photoList);
-    /*
-      It's an array of objects
-        each object has an id with the id (we need that)
-        that's actually all I need
-
-    */
-    const res = await updateGallery({
+    await updateGallery({
       variables: {
         galleryId,
         galleryName,
@@ -86,42 +76,9 @@ export default function EditGalleryPage({ query }) {
       },
     });
 
-    /*
-    gallery: 
-    id: "605fe33cec2ad4048ee85601"
-    data: {
-      name: "mut gallery"
-      description: "followed by updating these photos"
-      photos: {
-        disconnectAll: true
-        connect: [
-          { id: "605fe33aec2ad4048ee855ef" }
-          { id: "605fe33aec2ad4048ee855f0" }
-          { id: "605fe33aec2ad4048ee855f3" }
-          { id: "605fe33aec2ad4048ee855f4" }
-          { id: "605fe33aec2ad4048ee855f5" }
-        ]
-      }
-    }
-
-    Photos with order
-    (
-    data: [
-      { id: "605fe33aec2ad4048ee855ef", data: { order: 77 } }
-      { id: "605fe33aec2ad4048ee855f0", data: { order: 2984 } }
-      { id: "605fe33aec2ad4048ee855f3", data: { order: 32 } }
-      { id: "605fe33aec2ad4048ee855f4", data: { order: 495 } }
-      { id: "605fe33aec2ad4048ee855f5", data: { order: 7 } }
-    ]
-  )
-
-
-    */
-
     // ! Add toast for success
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    console.log('res is', res);
   }
 
   // TODO: Add 'status" data to modify
