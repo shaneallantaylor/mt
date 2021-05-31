@@ -22,8 +22,36 @@ export const Gallery = list({
       },
     }),
     photos: relationship({
-      ref: 'Photo',
+      ref: 'Photo.gallery',
       many: true,
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name', 'image', 'order'],
+        linkToItem: true,
+        hideCreate: true,
+        removeMode: 'disconnect',
+        listView: {
+          fieldMode: () => 'read',
+        },
+      },
     }),
+  },
+  hooks: {
+    afterChange: (afterChangeProps) => {
+      console.log('afterChangeProps fired', afterChangeProps);
+      if (true) {
+        console.log('true was true and you changed a gallery!');
+      }
+    },
+    resolveInput: (resolveInputProps) => {
+      console.log('resolveInputProps is', resolveInputProps);
+      if (resolveInputProps.resolvedData.photos) {
+        console.log(
+          'you changed the photos! Here are their IDs',
+          resolveInputProps.resolvedData.photos
+        );
+      }
+      return resolveInputProps.resolvedData;
+    },
   },
 });

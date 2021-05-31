@@ -1,7 +1,13 @@
 import 'dotenv/config';
 import { cloudinaryImage } from '@keystone-next/cloudinary';
 import { list } from '@keystone-next/keystone/schema';
-import { text, select, checkbox } from '@keystone-next/fields';
+import {
+  text,
+  select,
+  checkbox,
+  relationship,
+  integer,
+} from '@keystone-next/fields';
 
 export const cloudinary = {
   cloudName: process.env.CLOUD_NAME,
@@ -38,5 +44,32 @@ export const Photo = list({
         displayMode: 'segmented-control',
       },
     }),
+    order: integer(),
+    gallery: relationship({
+      ref: 'Gallery.photos',
+      many: false,
+      ui: { labelField: 'helper' },
+    }),
+  },
+  hooks: {
+    afterChange: (afterChangeProps) => {
+      // console.log(
+      //   'PHOTO HOOK: afterChangeProps fired and its args were',
+      //   afterChangeProps
+      // );
+      if (true) {
+        // console.log('true was true and you changed a PHOTO!');
+      }
+    },
+    resolveInput: (resolveInputProps) => {
+      // console.log('IN PHOTO HOOK: resolveInputProps is', resolveInputProps);
+      if (resolveInputProps.resolvedData.photos) {
+        // console.log(
+        //   'you changed the photos! Here are their IDs',
+        //   resolveInputProps.resolvedData.photos
+        // );
+      }
+      return resolveInputProps.resolvedData;
+    },
   },
 });
