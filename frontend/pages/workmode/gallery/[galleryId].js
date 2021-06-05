@@ -2,17 +2,17 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
-import Button from '../../../../components/styles/Button';
-import { UPDATE_GALLERY_MUTATION } from '../../../../graphql/mutations';
+import Button from '../../../components/styles/Button';
+import { UPDATE_GALLERY_MUTATION } from '../../../graphql/mutations';
 import {
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
   GET_PHOTOS_WITH_NO_GALLERY,
-} from '../../../../graphql/queries';
-import EasySort from '../../../../components/EasySort';
-import Loading from '../../../../components/Loading';
-import Error from '../../../../components/Error';
-import SelectRadios from '../../../../components/styles/SelectRadios';
-import AddPhotosToGallery from '../../../../components/AddPhotosToGallery';
+} from '../../../graphql/queries';
+import EasySort from '../../../components/EasySort';
+import Loading from '../../../components/Loading';
+import Error from '../../../components/Error';
+import SelectRadios from '../../../components/styles/SelectRadios';
+import AddPhotosToGallery from '../../../components/AddPhotosToGallery';
 
 export default function EditGalleryPage({ query }) {
   const { galleryId } = query;

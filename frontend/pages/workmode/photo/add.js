@@ -1,4 +1,4 @@
-import CreatePhoto from '../../components/CreatePhoto';
+import CreatePhoto from '../../../components/CreatePhoto';
 
 export default function AddPhotoPage() {
   return (

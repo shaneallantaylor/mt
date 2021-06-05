@@ -19,6 +19,36 @@ export const CREATE_PHOTO_MUTATION = gql`
   }
 `;
 
+export const UPDATE_PHOTO_MUTATION = gql`
+  mutation UPDATE_PHOTO_MUTATION(
+    $id: ID!
+    $name: String
+    $description: String
+    $altText: String
+  ) {
+    updatePhoto(
+      id: $id
+      data: { name: $name, description: $description, altText: $altText }
+    ) {
+      id
+      name
+      description
+      altText
+      gallery {
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_PHOTO_MUTATION = gql`
+  mutation DELETE_PHOTO_MUTATION($id: ID!) {
+    deletePhoto(id: $id) {
+      name
+    }
+  }
+`;
+
 export const UPDATE_GALLERY_MUTATION = gql`
   mutation UPDATE_GALLERY_MUTATION(
     $galleryId: ID!

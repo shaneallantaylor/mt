@@ -80,10 +80,13 @@ export const GALLERY_QUERY_WITH_SORTED_PHOTOS = gql`
 
 export const PHOTO_QUERY = gql`
   query PHOTO_QUERY($id: ID!) {
-    Photo(where: { id: $id }) {
+    photo: Photo(where: { id: $id }) {
       name
       description
       altText
+      gallery {
+        name
+      }
       image {
         publicUrlTransformed
       }
