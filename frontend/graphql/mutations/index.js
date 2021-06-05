@@ -24,6 +24,7 @@ export const UPDATE_GALLERY_MUTATION = gql`
     $galleryId: ID!
     $galleryName: String
     $galleryDescription: String
+    $galleryStatus: String
     $photosToConnect: [PhotoWhereUniqueInput]!
     $photosWithOrder: [PhotosUpdateInput]!
   ) {
@@ -32,6 +33,7 @@ export const UPDATE_GALLERY_MUTATION = gql`
       data: {
         name: $galleryName
         description: $galleryDescription
+        status: $galleryStatus
         photos: { disconnectAll: true, connect: $photosToConnect }
       }
     ) {

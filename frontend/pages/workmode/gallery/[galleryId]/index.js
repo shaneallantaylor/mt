@@ -1,20 +1,23 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import Button from '../../../../components/styles/Button';
 import { UPDATE_GALLERY_MUTATION } from '../../../../graphql/mutations';
 import {
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
-  ALL_PUBLISHED_GALLERIES_QUERY,
+  GET_PHOTOS_WITH_NO_GALLERY,
 } from '../../../../graphql/queries';
 import EasySort from '../../../../components/EasySort';
+import Loading from '../../../../components/Loading';
+import Error from '../../../../components/Error';
+import SelectRadios from '../../../../components/styles/SelectRadios';
+import AddPhotosToGallery from '../../../../components/AddPhotosToGallery';
 
 export default function EditGalleryPage({ query }) {
   const { galleryId } = query;
   const nameInput = useRef(null);
   const descriptionInput = useRef(null);
-  const statusInputHidden = useRef(null);
-  const statusInputPublished = useRef(null);
   const {
     data: queryData,
     error: queryError,
@@ -24,9 +27,19 @@ export default function EditGalleryPage({ query }) {
       id: galleryId,
     },
   });
-  console.log('queryData is', queryData);
+
+  const [
+    getPossiblePhotos,
+    {
+      data: possiblePhotos,
+      loading: possiblePhotosLoading,
+      error: possiblePhotosError,
+    },
+  ] = useLazyQuery(GET_PHOTOS_WITH_NO_GALLERY);
 
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
+  const [status, setStatus] = useState(queryData?.gallery?.status);
+  const [checkboxes, setCheckboxes] = useState({});
 
   const onSortEnd = (oldIndex, newIndex) => {
     setPhotoList((array) => arrayMove(array, oldIndex, newIndex));
@@ -36,20 +49,9 @@ export default function EditGalleryPage({ query }) {
     updateGallery,
     { loading: mutationLoading, error: mutationError },
   ] = useMutation(UPDATE_GALLERY_MUTATION);
-  console.log(' mutationError is', mutationError);
-  if (queryLoading) return <p>LOADING YOO</p>;
-  if (queryError)
-    return (
-      <p>
-        There was an error. I bet the gallery ID in the URL is wrong. Did you
-        try to type it yourself?
-      </p>
-    );
 
-  // logic section for this component if we have all the data we need
-
-  function handleStatusChange() {
-    console.log('you fired handleStatusChange!');
+  function handleStatusChange(e) {
+    setStatus(e.target.value);
   }
 
   async function handleSubmit(e) {
@@ -71,20 +73,48 @@ export default function EditGalleryPage({ query }) {
         galleryId,
         galleryName,
         galleryDescription,
+        galleryStatus: status,
         photosToConnect,
         photosWithOrder,
       },
     });
-
     // ! Add toast for success
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
 
-  // TODO: Add 'status" data to modify
+  function handleAddPhotos() {
+    const checkedPhotos = Object.entries(checkboxes)
+      .filter(([_, { checked }]) => checked === true)
+      .map(([_, { photo }]) => photo);
+    const newPhotoList = [...checkedPhotos, ...photoList];
+    setPhotoList(newPhotoList);
+  }
+
+  function handleRemovePhoto(e) {
+    console.log('e.target.dataset.idx', e.target.dataset.idx);
+    const index = parseInt(e.target.dataset.idx);
+    const newPhotoList = [...photoList];
+    newPhotoList.splice(index, 1);
+    setPhotoList(newPhotoList);
+    console.log('you attemped to remove');
+  }
+
+  function handleCheckboxInputChange(e) {
+    setCheckboxes({
+      ...checkboxes,
+      [e.target.id]: {
+        checked: e.target.checked,
+        photo: JSON.parse(e.target.dataset.photo),
+      },
+    });
+  }
+
   return (
     <div style={{ color: 'black ' }}>
-      <form onSubmit={handleSubmit}>
+      <Error content={mutationError || queryError || possiblePhotosError} />
+      <Loading size="big" content={mutationLoading || queryLoading} />
+      <form onSubmit={handleSubmit} disabled={mutationLoading}>
         <label htmlFor="name">
           Name
           <input
@@ -106,39 +136,51 @@ export default function EditGalleryPage({ query }) {
             defaultValue={queryData?.gallery.description}
           />
         </label>
-        <div>
-          {
-            // ! Fix status toggle
-          }
-          <label htmlFor="status">
+        <SelectRadios>
+          <label htmlFor="status-hidden">
             Hidden
             <input
-              ref={statusInputHidden}
               type="radio"
-              id="status"
-              name="status"
+              id="status-hidden"
+              name="status-hidden"
               value="HIDDEN"
-              checked={queryData?.gallery.status === 'HIDDEN'}
+              checked={status === 'HIDDEN'}
               onChange={handleStatusChange}
             />
-            <label htmlFor="status">
-              Published
-              <input
-                ref={statusInputPublished}
-                type="radio"
-                id="status"
-                name="status"
-                value="PUBLISHED"
-                checked={queryData?.gallery.status === 'PUBLISHED'}
-                onChange={handleStatusChange}
-              />
-            </label>
           </label>
-        </div>
-        <EasySort onSortEnd={onSortEnd} photos={photoList} />
+          <label htmlFor="status-pub">
+            Published
+            <input
+              type="radio"
+              id="status-pub"
+              name="status-pub"
+              value="PUBLISHED"
+              checked={status === 'PUBLISHED'}
+              onChange={handleStatusChange}
+            />
+          </label>
+        </SelectRadios>
+        <button type="button" onClick={getPossiblePhotos}>
+          I want to add photos
+        </button>
+        <AddPhotosToGallery
+          handleCheckboxInputChange={handleCheckboxInputChange}
+          handleAddPhotos={handleAddPhotos}
+          checkboxes={checkboxes}
+          possiblePhotos={possiblePhotos}
+        />
+        <EasySort
+          onSortEnd={onSortEnd}
+          photos={photoList}
+          handleRemovePhoto={handleRemovePhoto}
+        />
+
         <Button type="submit">Save Changes</Button>
       </form>
-      {mutationError && <p>oh no error</p>}
     </div>
   );
 }
+
+EditGalleryPage.propTypes = {
+  query: PropTypes.object,
+};

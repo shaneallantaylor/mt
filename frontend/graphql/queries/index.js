@@ -110,3 +110,19 @@ export const SEARCH_PHOTOS_QUERY = gql`
     }
   }
 `;
+
+export const GET_PHOTOS_WITH_NO_GALLERY = gql`
+  query GET_PHOTOS_WITH_NO_GALLERY {
+    possiblePhotos: allPhotos(
+      where: { gallery_is_null: true }
+      sortBy: order_ASC
+    ) {
+      name
+      id
+      order
+      image {
+        publicUrlTransformed
+      }
+    }
+  }
+`;

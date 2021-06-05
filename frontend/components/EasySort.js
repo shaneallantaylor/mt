@@ -12,7 +12,7 @@ const SortableStlyes = styled.div`
     max-width: fit-content;
     background: green;
     user-select: none;
-    pointer-events: none;
+    /* pointer-events: none; */
   }
 
   .dragged {
@@ -20,7 +20,8 @@ const SortableStlyes = styled.div`
   }
 `;
 
-export default function EasySort({ photos, onSortEnd }) {
+export default function EasySort({ photos, onSortEnd, handleRemovePhoto }) {
+  if (!photos) return null;
   return (
     <SortableStlyes>
       <SortableList
@@ -28,7 +29,7 @@ export default function EasySort({ photos, onSortEnd }) {
         className="list"
         draggedItemClassName="dragged"
       >
-        {photos?.map((photo) => (
+        {photos.map((photo, idx) => (
           <SortableItem key={photo?.id}>
             <div className="item">
               <img
@@ -36,6 +37,9 @@ export default function EasySort({ photos, onSortEnd }) {
                 alt={`${photo?.name} Thumb`}
               />
               <p>{photo?.name}</p>
+              <button type="button" data-idx={idx} onClick={handleRemovePhoto}>
+                Remove this photo
+              </button>
             </div>
           </SortableItem>
         ))}
