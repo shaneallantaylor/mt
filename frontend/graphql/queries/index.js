@@ -72,7 +72,7 @@ export const GALLERY_QUERY_WITH_SORTED_PHOTOS = gql`
       id
       order
       image {
-        publicUrlTransformed
+        publicUrlTransformed(transformation: { width: "200" })
       }
     }
   }
@@ -125,6 +125,18 @@ export const GET_PHOTOS_WITH_NO_GALLERY = gql`
       order
       image {
         publicUrlTransformed
+      }
+    }
+  }
+`;
+
+export const CURRENT_USER_QUERY = gql`
+  query CURRENT_USER_QUERY {
+    authenticatedItem {
+      ... on User {
+        id
+        email
+        name
       }
     }
   }
