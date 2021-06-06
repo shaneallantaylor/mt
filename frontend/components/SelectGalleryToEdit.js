@@ -1,15 +1,12 @@
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import Link from 'next/link';
-import { ALL_GALLERIES_QUERY } from '../../components/SelectGallery';
+import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 
-const GalleriesPage = () => {
-  const { data, error, loading } = useQuery(ALL_GALLERIES_QUERY);
+export default function SelectGalleryToEdit() {
+  const { data, error, loading } = useQuery(ALL_PUBLISHED_GALLERIES_QUERY);
 
   if (loading) return <p>We are loading</p>;
   if (error) return <p>We are error!</p>;
-  // handle the selection of a gallery
-  // and feed that to the DND list
 
   return (
     <div style={{ color: 'black' }}>
@@ -33,6 +30,4 @@ const GalleriesPage = () => {
       </section>
     </div>
   );
-};
-
-export default GalleriesPage;
+}
