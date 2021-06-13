@@ -11,7 +11,7 @@ const HeaderStyles = styled.header`
   flex-direction: column;
   align-items: center;
   padding: 0 16px;
-  background: hsl(0 0% 0% / 90%);
+  background: var(--headerbg);
 
   @media ${breakpoints.tabLand} {
     flex-direction: row;

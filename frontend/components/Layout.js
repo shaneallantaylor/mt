@@ -5,9 +5,10 @@ import Header from './Header';
 const GlobalStyles = createGlobalStyle`
   html {
     --black: #000000;
-    --white: #ffffff;
+    --white: #f9f9f9;
     --gray: #f0f0f0;
     --primary: #65b7d3;
+    --headerbg: rgb(25,25,25);
     --fsl: 2rem;
     --fsxl: 2.5rem;
     --fsxxl: 3rem;
@@ -29,6 +30,7 @@ const GlobalStyles = createGlobalStyle`
     line-height: 2;
     font-family: 'Noto Sans JP', serif;
     color: var(--white);
+    background: var(--white);
   }
 
   a {

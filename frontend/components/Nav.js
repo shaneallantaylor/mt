@@ -20,10 +20,11 @@ const NavStyles = styled.nav`
     display: block;
     height: 100%;
     width: 25px;
-    background: -webkit-linear-gradient(0deg ,rgba(25,25,25,0),rgb(0 0 0));
+    background: -webkit-linear-gradient(0deg ,rgba(0,0,0,0), var(--headerbg));
     position: absolute;
     top: 0;
     right: -2px;
+    z-index: 1;
 
     @media ${breakpoints.tabPort} {
       display: none;
@@ -86,7 +87,6 @@ const NavStyles = styled.nav`
 export default function Nav() {
   const { data, error, loading } = useQuery(ALL_GALLERIES_QUERY);
   const { query } = useRouter();
-  const [active, setActive] = useState(true);
   if (loading) return <h2>WE LOADING...</h2>;
   if (error) return <h2>Oh no erro</h2>;
 
