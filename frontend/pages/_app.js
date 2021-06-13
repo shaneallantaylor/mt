@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import Layout from '../components/Layout';
 
 import withData from '../lib/withData';
-import '../components/styles/nprogress.css';
+import '../styles/nprogress.css';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -17,6 +17,11 @@ function MyApp({ Component, pageProps, apollo }) {
       <Layout>
         <Head>
           <title>Next.js + MongoDB App</title>
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;700&display=optional"
+            rel="stylesheet"
+          />
         </Head>
         <Component {...pageProps} />
       </Layout>
