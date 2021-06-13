@@ -3,9 +3,12 @@ import styled from 'styled-components';
 const Wrapper = styled.figure`
   margin: 0;
   position: relative;
-  outline: 2px solid deeppink;
+  /* outline: 2px solid deeppink; */
   line-height: 0px;
   overflow: hidden;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: var(--bs);
 
   ${(props) => (props.isLandscape ? 'grid-column: span 2' : '')}
 `;
@@ -18,7 +21,8 @@ const TextWrapper = styled.figcaption`
   right: 0;
   width: 100%;
   background: hsl(0, 0%, 0%, 0.4);
-  display: flex;
+  /* display: flex; */
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;

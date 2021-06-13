@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 
 import Search from './Search';
-import CatalogStyles from './styles/CatalogStyles';
+import CatalogStyles from '../styles/CatalogStyles';
 import { ALL_PHOTOS_QUERY } from '../graphql/queries';
 
 export default function Catalog() {

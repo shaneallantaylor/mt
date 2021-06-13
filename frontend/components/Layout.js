@@ -7,7 +7,7 @@ const GlobalStyles = createGlobalStyle`
     --black: #000000;
     --white: #ffffff;
     --gray: #f0f0f0;
-    --bs: 0 12px 24px 0 rgba(0, 0, 0, 0.9);
+    --bs: 2px 3px 4px 0 rgba(0,0,0,0.3);
     box-sizing: border-box;
   }
 
@@ -20,7 +20,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     font-size: 1.5rem;
     line-height: 2;
-    font-family: sans-serif;
+    font-family: 'Noto Sans JP', serif;
     color: var(--white);
   }
 

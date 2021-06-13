@@ -23,6 +23,16 @@ export const ALL_PUBLISHED_GALLERIES_QUERY = gql`
   }
 `;
 
+export const ALL_GALLERIES_QUERY = gql`
+  query ALL_GALLERIES_QUERY {
+    allGalleries(sortBy: name_ASC) {
+      id
+      description
+      name
+    }
+  }
+`;
+
 export const GALLERY_PHOTOS_BY_NAME_QUERY = gql`
   query GALLERY_PHOTOS_BY_NAME_QUERY($galleryName: String!) {
     allGalleries(where: { name_i: $galleryName }) {

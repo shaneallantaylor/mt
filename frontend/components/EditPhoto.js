@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import Button from './styles/Button';
+import Button from '../styles/Button';
 import {
   UPDATE_PHOTO_MUTATION,
   DELETE_PHOTO_MUTATION,
