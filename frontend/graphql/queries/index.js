@@ -41,6 +41,9 @@ export const GALLERY_PHOTOS_BY_NAME_QUERY = gql`
         name
         description
         altText
+        gallery {
+          name
+        }
         image {
           publicUrlTransformed
         }

@@ -1,16 +1,42 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 
-const Wrapper = styled.figure`
+const WrapperBackground = styled.figure`
   margin: 0;
   position: relative;
+  background-image: url(${(props) => props.imgsrc});
+  background-size: cover;
+  background-position: center;
+  padding: 1rem;
   /* outline: 2px solid deeppink; */
   line-height: 0px;
   overflow: hidden;
-  border-top-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  box-shadow: var(--bs);
+  /* border-top-left-radius: 20px; */
+  /* border-bottom-right-radius: 20px; */
+  /* box-shadow: var(--bs); */
+  /* display: grid; */
+
+  &:before {
+    content: '';
+    padding-bottom: 100%;
+    display: block;
+    /* grid-area: 1 / 1 / 2 / 2; */
+  }
 
   ${(props) => (props.isLandscape ? 'grid-column: span 2' : '')}
+`;
+
+const WrapperStandard = styled.figure`
+  margin: 0;
+  position: relative;
+  /* padding: 1rem; */
+  /* outline: 2px solid deeppink; */
+  line-height: 0px;
+  overflow: hidden;
+  /* border-top-left-radius: 20px; */
+  /* border-bottom-right-radius: 20px; */
+  /* box-shadow: var(--bs); */
+  cursor: pointer;
 `;
 
 const TextWrapper = styled.figcaption`
@@ -35,8 +61,8 @@ const TextWrapper = styled.figcaption`
 `;
 
 const PhotoImg = styled.img`
-  height: 100%;
   width: 100%;
+  height: 100%;
   object-fit: cover;
 `;
 
@@ -45,15 +71,18 @@ export default function Photo({
   image,
   name,
   description,
+  gallery,
   isLandscape = false,
 }) {
   return (
-    <Wrapper key={id} isLandscape={isLandscape}>
-      <PhotoImg src={image.publicUrlTransformed} alt={name} />
-      <TextWrapper className="details">
-        <p className="name">Name: {name}</p>
-        <p className="desc">Desc: {description}</p>
-      </TextWrapper>
-    </Wrapper>
+    <WrapperStandard
+      key={id}
+      isLandscape={isLandscape}
+      imgsrc={image.publicUrlTransformed}
+    >
+      <Link href={`${gallery.name}/photo/${id}`}>
+        <PhotoImg src={image.publicUrlTransformed} alt={name} />
+      </Link>
+    </WrapperStandard>
   );
 }
