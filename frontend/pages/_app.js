@@ -17,11 +17,6 @@ function MyApp({ Component, pageProps, apollo }) {
       <Layout>
         <Head>
           <title>Next.js + MongoDB App</title>
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;700&display=optional"
-            rel="stylesheet"
-          />
         </Head>
         <Component {...pageProps} />
       </Layout>

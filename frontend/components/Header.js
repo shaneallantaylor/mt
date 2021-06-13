@@ -13,7 +13,7 @@ const HeaderStyles = styled.header`
   padding: 0 16px;
   background: hsl(0 0% 0% / 90%);
 
-  @media ${breakpoints.laptop} {
+  @media ${breakpoints.tabLand} {
     flex-direction: row;
   }
 `;
@@ -25,6 +25,10 @@ const Logo = styled.h1`
   max-height: 45px;
   img {
     object-fit: scale-down;
+  }
+
+  @media ${breakpoints.tabLand} {
+    margin: 10px 0 10px 0;
   }
 `;
 
