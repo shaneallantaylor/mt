@@ -1,30 +1,6 @@
 import styled from 'styled-components';
 import Link from 'next/link';
-
-const WrapperBackground = styled.figure`
-  margin: 0;
-  position: relative;
-  background-image: url(${(props) => props.imgsrc});
-  background-size: cover;
-  background-position: center;
-  padding: 1rem;
-  /* outline: 2px solid deeppink; */
-  line-height: 0px;
-  overflow: hidden;
-  /* border-top-left-radius: 20px; */
-  /* border-bottom-right-radius: 20px; */
-  /* box-shadow: var(--bs); */
-  /* display: grid; */
-
-  &:before {
-    content: '';
-    padding-bottom: 100%;
-    display: block;
-    /* grid-area: 1 / 1 / 2 / 2; */
-  }
-
-  ${(props) => (props.isLandscape ? 'grid-column: span 2' : '')}
-`;
+import { useState } from 'react';
 
 const WrapperStandard = styled.figure`
   margin: 0;
@@ -39,31 +15,19 @@ const WrapperStandard = styled.figure`
   cursor: pointer;
 `;
 
-const TextWrapper = styled.figcaption`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+const PlaceHolder = styled.div`
   width: 100%;
-  background: hsl(0, 0%, 0%, 0.4);
-  /* display: flex; */
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  transition: opacity 0.4s ease;
-
-  &:hover {
-    opacity: 1;
-  }
+  height: 100%;
+  background: var(--gray);
 `;
 
 const PhotoImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: ${(props) => (props.isLoaded ? 1 : 0)};
+  transition: opacity 0.2s ease;
+  background-color: var(--gray);
 `;
 
 export default function Photo({
@@ -74,6 +38,12 @@ export default function Photo({
   gallery,
   isLandscape = false,
 }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleOnLoad = () => {
+    setIsLoaded(true);
+  };
+
   return (
     <WrapperStandard
       key={id}
@@ -81,7 +51,14 @@ export default function Photo({
       imgsrc={image.publicUrlTransformed}
     >
       <Link href={`${gallery.name}/photo/${id}`}>
-        <PhotoImg src={image.publicUrlTransformed} alt={name} />
+        <PlaceHolder>
+          <PhotoImg
+            isLoaded={isLoaded}
+            onLoad={handleOnLoad}
+            src={image.publicUrlTransformed}
+            alt={name}
+          />
+        </PlaceHolder>
       </Link>
     </WrapperStandard>
   );

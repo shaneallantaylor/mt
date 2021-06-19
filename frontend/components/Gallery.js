@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Photo from './Photo';
@@ -16,17 +16,17 @@ const GalleryStylesUsingBackground = styled.section`
 export default function Gallery() {
   const router = useRouter();
   const { gallerySlug } = router.query;
-  const { data, error, loading } = useQuery(GALLERY_PHOTOS_BY_NAME_QUERY, {
+  const { data, loading } = useQuery(GALLERY_PHOTOS_BY_NAME_QUERY, {
     variables: { galleryName: gallerySlug },
   });
-  const photos = data?.allGalleries[0]?.photos || [];
+  const photos = data?.allGalleries[0]?.photos;
 
   if (loading) return <h2>WE LOADING...</h2>;
 
   return (
     <GalleryStylesUsingBackground>
       {photos.map((photo) => (
-        <Photo {...photo} />
+        <Photo key={photo.id} {...photo} />
       ))}
     </GalleryStylesUsingBackground>
   );
