@@ -63,8 +63,9 @@ const NavStyles = styled.nav`
         bottom: 0;
         left: 0;
         background: var(--primary);
-        height: 4px;
+        height: 2px;
         width: 0%;
+        border-radius: 20px;
       }
 
       &.active {

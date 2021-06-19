@@ -4,6 +4,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { PHOTO_QUERY } from '../graphql/queries';
+import SVGLogo from './SVGLogo';
 
 const SinglePhotoContainer = styled.div`
   height: calc(100vh - 110px);
@@ -44,17 +45,32 @@ const SingleImageDescription = styled.p`
 `;
 
 const CloseButton = styled.div`
-  background: red;
+  border-radius: 50%;
   width: 40px;
   height: 40px;
   top: 0;
   right: 0;
   position: absolute;
   cursor: pointer;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s ease;
+
+  &:hover {
+    background-color: var(--black);
+  }
 
   svg {
-    height: 100%;
-    width: 100%;
+    stroke: var(--black);
+    width: 24px;
+    height: 24px;
+    transition: stroke 0.5s ease;
+  }
+
+  &:hover svg {
+    stroke: var(--white);
   }
 `;
 
@@ -75,30 +91,8 @@ export default function SinglePhoto({ id }) {
         <title>Megan Thompson | {data.photo.name}</title>
       </Head>
       <Link href={`/gallery/${data.photo.gallery.name}`}>
-        <CloseButton>
-          <svg
-            viewBox="0 0 40 40"
-            version="1.1"
-            width="100%"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <line
-              x1="1"
-              y1="11"
-              x2="11"
-              y2="1"
-              stroke="black"
-              strokeWidth="2"
-            />
-            <line
-              x1="1"
-              y1="1"
-              x2="11"
-              y2="11"
-              stroke="black"
-              strokeWidth="2"
-            />
-          </svg>
+        <CloseButton aria-label="Close">
+          <SVGLogo />
         </CloseButton>
       </Link>
       <SingleImg
