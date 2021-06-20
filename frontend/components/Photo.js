@@ -1,33 +1,48 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
+
+const loading = keyframes`
+	0% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`;
 
 const WrapperStandard = styled.figure`
   margin: 0;
-  position: relative;
-  /* padding: 1rem; */
-  /* outline: 2px solid deeppink; */
-  line-height: 0px;
-  overflow: hidden;
-  /* border-top-left-radius: 20px; */
-  /* border-bottom-right-radius: 20px; */
-  /* box-shadow: var(--bs); */
   cursor: pointer;
 `;
 
-const PlaceHolder = styled.div`
-  width: 100%;
-  height: 100%;
-  background: var(--gray);
+const ImageWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 0;
+  opacity: ${({ isLoaded }) => (isLoaded ? 1 : 0)};
+  transition: opacity 2s ease-out;
 `;
 
-const PhotoImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: ${(props) => (props.isLoaded ? 1 : 0)};
-  transition: opacity 0.2s ease;
-  background-color: var(--gray);
+const ImageContainer = styled.div`
+  position: relative;
+  height: 0;
+  padding-top: ${(340 / 227) * 100}%;
+  /* background: linear-gradient(-270deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
+  background: linear-gradient(
+    270deg,
+    #e6e6e6,
+    #e6e6e6,
+    #e6e6e6,
+    #fbfbfb,
+    #e6e6e6,
+    #e6e6e6,
+    #e6e6e6
+  );
+  background-size: 400% 400%;
+  animation: ${loading} 4s ease forwards infinite;
 `;
 
 export default function Photo({
@@ -45,20 +60,22 @@ export default function Photo({
   };
 
   return (
-    <WrapperStandard
-      key={id}
-      isLandscape={isLandscape}
-      imgsrc={image.publicUrlTransformed}
-    >
+    <WrapperStandard>
       <Link href={`${gallery.name}/photo/${id}`}>
-        <PlaceHolder>
-          <PhotoImg
-            isLoaded={isLoaded}
-            onLoad={handleOnLoad}
-            src={image.publicUrlTransformed}
-            alt={name}
-          />
-        </PlaceHolder>
+        <ImageContainer>
+          <ImageWrapper isLoaded={isLoaded}>
+            <Image
+              // layout="fill"
+              height="1200"
+              width="800"
+              objectFit="cover"
+              src={image.publicUrlTransformed}
+              alt={name}
+              onLoad={handleOnLoad}
+              unoptimized
+            />
+          </ImageWrapper>
+        </ImageContainer>
       </Link>
     </WrapperStandard>
   );

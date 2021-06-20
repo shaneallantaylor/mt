@@ -1,13 +1,23 @@
-import gql from 'graphql-tag';
+import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import Head from 'next/head';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
+import { useState } from 'react';
 import { PHOTO_QUERY } from '../graphql/queries';
 import SVGLogo from './SVGLogo';
 
-const SinglePhotoContainer = styled.div`
-  height: calc(100vh - 110px);
+const loading = keyframes`
+	0% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`;
+
+const PageContainer = styled.div`
+  padding: 0 60px;
   position: relative;
 `;
 
@@ -24,6 +34,38 @@ const SingleImg = styled.img`
   line-height: 0;
   margin: 0;
   padding: 0 60px;
+`;
+
+const SingleImageContainer = styled.div`
+  height: calc(100vh - 110px);
+  position: relative;
+`;
+
+const SingleImageWrapper = styled.div`
+  opacity: ${({ isLoaded }) => (isLoaded ? 1 : 0)};
+  transition: opacity 0.5s ease-in;
+`;
+
+const SingleImageLoader = styled.div`
+  height: 5px;
+  border-radius: 20px;
+  width: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    270deg,
+    #e6e6e6,
+    #e6e6e6,
+    #e6e6e6,
+    #fbfbfb,
+    #e6e6e6,
+    #e6e6e6,
+    #e6e6e6
+  );
+  background-size: 400% 400%;
+  animation: ${loading} 4s ease forwards infinite;
 `;
 
 const SinglePhotoName = styled.h2`
@@ -80,13 +122,18 @@ export default function SinglePhoto({ id }) {
       id,
     },
   });
-  console.log('data in single photo is', data);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleOnLoad = () => {
+    setIsLoaded(true);
+  };
 
   if (loading) return <p>LOADING YOO</p>;
   if (error) return <p>There was an error. Ooops!</p>;
   // if (data === undefined) return null;
   return (
-    <SinglePhotoContainer>
+    <PageContainer>
       <Head>
         <title>Megan Thompson | {data.photo.name}</title>
       </Head>
@@ -95,16 +142,27 @@ export default function SinglePhoto({ id }) {
           <SVGLogo />
         </CloseButton>
       </Link>
-      <SingleImg
-        src={data.photo.image.publicUrlTransformed}
-        alt={data.photo.altText}
-      />
+      <SingleImageContainer>
+        {!isLoaded ? <SingleImageLoader /> : null}
+        <SingleImageWrapper isLoaded={isLoaded}>
+          <Image
+            layout="fill"
+            // height="20"
+            // width="20"
+            objectFit="contain"
+            onLoad={handleOnLoad}
+            unoptimized
+            src={data.photo.image.publicUrlTransformed}
+            alt={data.photo.altText}
+          />
+        </SingleImageWrapper>
+      </SingleImageContainer>
       <PhotoInfoContainer>
         <SinglePhotoName>{data.photo.name}</SinglePhotoName>
         <SingleImageDescription>
           {data.photo.description}
         </SingleImageDescription>
       </PhotoInfoContainer>
-    </SinglePhotoContainer>
+    </PageContainer>
   );
 }
