@@ -1,11 +1,26 @@
 import gql from 'graphql-tag';
 
+export const ABOUT_QUERY = gql`
+  query ABOUT_QUERY {
+    about: About(where: { id: "60d7a9cb3dcaf4174f345396" }) {
+      text
+      background {
+        image {
+          id
+          publicUrlTransformed
+        }
+      }
+    }
+  }
+`;
+
 export const ALL_PHOTOS_QUERY = gql`
   query ALL_PHOTOS_QUERY {
     allPhotos {
       id
       description
       name
+      altText
       image {
         publicUrlTransformed
       }

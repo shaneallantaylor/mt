@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Button = styled.button`
   align-items: center;
   border-style: solid;
-  cursor: pointer;
+  cursor: ${({ loading }) => (loading ? 'not-allowed' : 'pointer')};
   display: inline-flex;
   flex-shrink: 0;
   justify-content: center;
@@ -11,11 +11,12 @@ const Button = styled.button`
   outline: 0;
   position: relative;
   white-space: nowrap;
-  background-color: var(--black);
+  background-color: ${({ loading }) =>
+    loading ? '#d8d8d8' : 'var(--primary)'};
   border-color: var(--gray);
   border-radius: 6px;
   border-width: 1px;
-  color: #ffffff;
+  color: ${({ loading }) => (loading ? 'var(--white)' : '#ffffff')};
   font-size: 1rem;
   font-weight: 500;
   height: 38px;

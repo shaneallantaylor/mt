@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from 'styled-components';
 import EasySort from './EasySort';
-import Button from './styles/Button';
+import Button from '../styles/Button';
 import { UPDATE_GALLERY_MUTATION } from '../graphql/mutations';
 import {
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
@@ -12,7 +12,7 @@ import {
 } from '../graphql/queries';
 import Loading from './Loading';
 import Error from './Error';
-import SelectRadios from './styles/SelectRadios';
+import SelectRadios from '../styles/SelectRadios';
 import AddPhotosToGallery from './AddPhotosToGallery';
 
 const TextInputContainer = styled.div`

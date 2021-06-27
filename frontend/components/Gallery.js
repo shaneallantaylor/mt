@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Photo from './Photo';
 import { GALLERY_PHOTOS_BY_NAME_QUERY } from '../graphql/queries';
 
-const GalleryStylesUsingBackground = styled.section`
+const GalleryContainer = styled.section`
+  padding: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   grid-auto-rows: 1fr;
@@ -24,10 +25,10 @@ export default function Gallery() {
   if (loading) return <h2>WE LOADING...</h2>;
 
   return (
-    <GalleryStylesUsingBackground>
+    <GalleryContainer>
       {photos.map((photo) => (
         <Photo key={photo.id} {...photo} />
       ))}
-    </GalleryStylesUsingBackground>
+    </GalleryContainer>
   );
 }

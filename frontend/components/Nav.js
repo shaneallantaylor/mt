@@ -45,6 +45,7 @@ const NavStyles = styled.nav`
     }
     
     @media ${breakpoints.tabLand} {
+      margin: 0;
       justify-content: flex-end;
       gap: 30px;
     }

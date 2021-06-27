@@ -19,21 +19,13 @@ const loading = keyframes`
 const PageContainer = styled.div`
   padding: 0 60px;
   position: relative;
+  margin: 20px;
 `;
 
 const PhotoInfoContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`;
-
-const SingleImg = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
-  line-height: 0;
-  margin: 0;
-  padding: 0 60px;
 `;
 
 const SingleImageContainer = styled.div`

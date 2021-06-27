@@ -1,7 +1,6 @@
 import SortableList, { SortableItem } from 'react-easy-sort';
 import styled from 'styled-components';
-import Link from 'next/link';
-import Button from './styles/Button';
+import Button from '../styles/Button';
 
 const SortableStlyes = styled.div`
   .list {

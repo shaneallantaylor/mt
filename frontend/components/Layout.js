@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
+import { ToastContainer } from 'react-toastify';
 import Header from './Header';
+import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalStyles = createGlobalStyle`
   html {
+    height: 100%;
+    background: var(--black);
+
     --black: #000000;
     --white: #f9f9f9;
     --gray: #f0f0f0;
@@ -24,13 +29,18 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    height: 100%;
     padding: 0;
     margin: 0;
     font-size: 1.5rem;
     line-height: 2;
-    font-family: 'Noto Sans JP', serif;
+    font-family: 'Noto Sans JP', sans-serif;
     color: var(--white);
     background: var(--white);
+  }
+
+  #__next {
+    height: 100%
   }
 
   a {
@@ -47,9 +57,10 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const MainStyles = styled.main`
+  height: calc(100% - 65px);
   max-width: 100vw;
   overflow-x: hidden;
-  padding: 20px;
+  /* padding: 20px; */
 `;
 
 export default function Layout({ children }) {
@@ -58,6 +69,11 @@ export default function Layout({ children }) {
       <GlobalStyles />
       <Header />
       <MainStyles>{children}</MainStyles>
+      <ToastContainer
+        pauseOnHover={false}
+        hideProgressBar
+        position="bottom-right"
+      />
     </>
   );
 }

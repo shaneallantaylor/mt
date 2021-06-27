@@ -19,6 +19,22 @@ export const CREATE_PHOTO_MUTATION = gql`
   }
 `;
 
+export const UPDATE_ABOUT_MUTATION = gql`
+  mutation UPDATE_ABOUT_MUTATION($text: String!, $newBackgroundId: ID!) {
+    updateAbout(
+      id: "60d7a9cb3dcaf4174f345396"
+      data: { text: $text, background: { connect: { id: $newBackgroundId } } }
+    ) {
+      text
+      background {
+        image {
+          publicUrlTransformed
+        }
+      }
+    }
+  }
+`;
+
 export const UPDATE_PHOTO_MUTATION = gql`
   mutation UPDATE_PHOTO_MUTATION(
     $id: ID!

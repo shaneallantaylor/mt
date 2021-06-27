@@ -5,9 +5,10 @@ import {
   withItemData,
   statelessSessions,
 } from '@keystone-next/keystone/session';
+import { Gallery } from './schemas/Gallery';
 import { User } from './schemas/User';
 import { Photo } from './schemas/Photo';
-import { Gallery } from './schemas/Gallery';
+import { About } from './schemas/About';
 import { insertSeedData } from './seed-data';
 
 const databaseUrl = process.env.MONGODB_URI;
@@ -51,6 +52,7 @@ export default withAuth(
       User,
       Photo,
       Gallery,
+      About,
     }),
     ui: {
       isAccessAllowed: ({ session }) => !!session?.data,
