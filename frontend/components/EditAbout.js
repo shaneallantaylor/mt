@@ -11,6 +11,7 @@ import TextArea from './TextArea';
 import { renderSuccessToast } from './toasts';
 import WorkmodeContainer from './WorkmodeContainer';
 import SelectNewBackground from './SelectNewBackground';
+import WorkmodeNav from './WorkmodeNav';
 
 const ChangeBackgroundContainer = styled.div`
   border-top: 1px solid black;
@@ -98,12 +99,13 @@ export default function EditAbout() {
   if (aboutError || mutationError) return null;
   return (
     <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit About" />
       <Error content={mutationError || aboutError} />
       <Loading size="big" content={mutationLoading || aboutLoading} />
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
         <div>
           <label htmlFor="about-text">
-            <div>About</div>
+            <div>The words:</div>
             <TextArea
               id="about-text"
               ref={aboutInput}

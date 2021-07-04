@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Photo from './Photo';
-import { GALLERY_PHOTOS_BY_NAME_QUERY } from '../graphql/queries';
+import { GALLERY_PHOTOS_BY_SLUG_QUERY } from '../graphql/queries';
 
 const GalleryContainer = styled.section`
   padding: 20px;
@@ -17,10 +17,10 @@ const GalleryContainer = styled.section`
 export default function Gallery() {
   const router = useRouter();
   const { gallerySlug } = router.query;
-  const { data, loading } = useQuery(GALLERY_PHOTOS_BY_NAME_QUERY, {
-    variables: { galleryName: gallerySlug },
+  const { data, loading } = useQuery(GALLERY_PHOTOS_BY_SLUG_QUERY, {
+    variables: { gallerySlug },
   });
-  const photos = data?.allGalleries[0]?.photos;
+  const photos = data?.allGalleries[0]?.photos || [];
 
   if (loading) return <h2>WE LOADING...</h2>;
 

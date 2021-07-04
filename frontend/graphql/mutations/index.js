@@ -95,6 +95,18 @@ export const UPDATE_GALLERY_MUTATION = gql`
   }
 `;
 
+export const UPDATE_GALLERY_ORDER_MUTATION = gql`
+  mutation UPDATE_GALLERY_ORDER_MUTATION(
+    $navItemsWithOrder: [GalleriesUpdateInput]!
+  ) {
+    updateGalleries(data: $navItemsWithOrder) {
+      id
+      name
+      order
+    }
+  }
+`;
+
 export const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {

@@ -23,7 +23,7 @@ const ImageWrapper = styled.div`
   left: 0;
   line-height: 0;
   opacity: ${({ isLoaded }) => (isLoaded ? 1 : 0)};
-  transition: opacity 2s ease-out;
+  transition: opacity 0.6s ease-out;
 `;
 
 const ImageContainer = styled.div`
@@ -45,14 +45,7 @@ const ImageContainer = styled.div`
   animation: ${loading} 4s ease forwards infinite;
 `;
 
-export default function Photo({
-  id,
-  image,
-  name,
-  description,
-  gallery,
-  isLandscape = false,
-}) {
+export default function Photo({ id, image, name, gallery }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleOnLoad = () => {

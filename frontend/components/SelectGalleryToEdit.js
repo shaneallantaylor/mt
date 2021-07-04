@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
+import WorkmodeContainer from './WorkmodeContainer';
+import WorkmodeNav from './WorkmodeNav';
 
 export default function SelectGalleryToEdit() {
   const { data, error, loading } = useQuery(ALL_PUBLISHED_GALLERIES_QUERY);
@@ -9,8 +11,8 @@ export default function SelectGalleryToEdit() {
   if (error) return <p>We are error!</p>;
 
   return (
-    <div style={{ color: 'black' }}>
-      <h1>Galleries</h1>
+    <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit Galleries" />
       <section>
         <ul>
           {data.allGalleries.map((gallery) => (
@@ -28,6 +30,6 @@ export default function SelectGalleryToEdit() {
           in the gallery. Press the 'i' icon to edit meta data (story and stuff)
         </p>
       </section>
-    </div>
+    </WorkmodeContainer>
   );
 }

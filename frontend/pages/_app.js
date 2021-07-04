@@ -16,7 +16,12 @@ function MyApp({ Component, pageProps, apollo }) {
     <ApolloProvider client={apollo}>
       <Layout>
         <Head>
-          <title>Next.js + MongoDB App</title>
+          <title>Megan Thompson Photography | meganpickturetaker</title>
+          <meta property="og:title" content="Megan Thompson Photography" />
+          <meta
+            property="og:description"
+            content="Megan Thompson works in Los Angeles, California. She dog person and available for creative assignment worldwide!"
+          />
         </Head>
         <Component {...pageProps} />
       </Layout>

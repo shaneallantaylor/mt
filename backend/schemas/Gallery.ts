@@ -1,17 +1,29 @@
 import { list } from '@keystone-next/keystone/schema';
-import { text, select, relationship } from '@keystone-next/fields';
+import { text, select, relationship, integer } from '@keystone-next/fields';
+import slugify from '../utils/slugify.js';
 
 export const Gallery = list({
   // access
   fields: {
     name: text({
+      isUnique: true,
       isRequired: true,
+    }),
+    slug: text({
+      isUnique: true,
+      ui: {
+        itemView: {
+          fieldMode: () => 'hidden',
+        },
+        displayMode: 'input',
+      },
     }),
     description: text({
       ui: {
         displayMode: 'textarea',
       },
     }),
+    order: integer(),
     status: select({
       options: [
         { label: 'Published', value: 'PUBLISHED' },
@@ -35,5 +47,14 @@ export const Gallery = list({
         },
       },
     }),
+  },
+  hooks: {
+    resolveInput: ({ resolvedData }) => {
+      const { name } = resolvedData;
+      if (name) {
+        resolvedData.slug = slugify(name);
+      }
+      return resolvedData;
+    },
   },
 });

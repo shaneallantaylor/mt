@@ -1,12 +1,9 @@
-import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
 import Search from './Search';
 import PhotoCards from './PhotoCards';
 import { ALL_PHOTOS_QUERY } from '../graphql/queries';
-
-const AllPhotosContainer = styled.div`
-  padding: 20px;
-`;
+import WorkmodeContainer from './WorkmodeContainer';
+import WorkmodeNav from './WorkmodeNav';
 
 export default function AllPhotos() {
   const {
@@ -16,9 +13,10 @@ export default function AllPhotos() {
   } = useQuery(ALL_PHOTOS_QUERY);
 
   return (
-    <AllPhotosContainer>
+    <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit Photos" />
       <Search />
       <PhotoCards allPhotos={allPhotos} />
-    </AllPhotosContainer>
+    </WorkmodeContainer>
   );
 }

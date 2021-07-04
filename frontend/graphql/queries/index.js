@@ -14,6 +14,16 @@ export const ABOUT_QUERY = gql`
   }
 `;
 
+export const ALL_HOMEPAGE_BACKGROUNDS_QUERY = gql`
+  query ALL_HOMEPAGE_BACKGROUNDS_QUERY {
+    backgroundPhotos: allPhotos(where: { backgroundImage: true }) {
+      image {
+        publicUrlTransformed
+      }
+    }
+  }
+`;
+
 export const ALL_PHOTOS_QUERY = gql`
   query ALL_PHOTOS_QUERY {
     allPhotos {
@@ -30,7 +40,7 @@ export const ALL_PHOTOS_QUERY = gql`
 
 export const ALL_PUBLISHED_GALLERIES_QUERY = gql`
   query ALL_PUBLISHED_GALLERIES_QUERY {
-    allGalleries(where: { status_i: "Published" }, sortBy: name_ASC) {
+    allGalleries(where: { status_i: "Published" }, sortBy: order_ASC) {
       id
       description
       name
@@ -48,10 +58,10 @@ export const ALL_GALLERIES_QUERY = gql`
   }
 `;
 
-export const GALLERY_PHOTOS_BY_NAME_QUERY = gql`
-  query GALLERY_PHOTOS_BY_NAME_QUERY($galleryName: String!) {
-    allGalleries(where: { name_i: $galleryName }) {
-      photos {
+export const GALLERY_PHOTOS_BY_SLUG_QUERY = gql`
+  query GALLERY_PHOTOS_BY_SLUG_QUERY($gallerySlug: String!) {
+    allGalleries(where: { slug_i: $gallerySlug }) {
+      photos(where: { status_i: "Published" }, sortBy: order_ASC) {
         id
         name
         description

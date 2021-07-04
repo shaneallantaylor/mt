@@ -1,20 +1,15 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  ALL_GALLERIES_QUERY,
-  ALL_PUBLISHED_GALLERIES_QUERY,
-} from '../graphql/queries';
+import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 import breakpoints from '../theme/breakpoints';
+import { slugify } from '../lib';
 
 const NavStyles = styled.nav`
   width: 100%;
   overflow: hidden;
   position: relative;
-
-
 
   .fader {
     display: block;
@@ -29,7 +24,6 @@ const NavStyles = styled.nav`
     @media ${breakpoints.tabPort} {
       display: none;
     }
-
   }
 
   }
@@ -87,7 +81,7 @@ const NavStyles = styled.nav`
 `;
 
 export default function Nav() {
-  const { data, error, loading } = useQuery(ALL_GALLERIES_QUERY);
+  const { data, error, loading } = useQuery(ALL_PUBLISHED_GALLERIES_QUERY);
   const { query } = useRouter();
   if (loading) return <h2>WE LOADING...</h2>;
   if (error) return <h2>Oh no erro</h2>;
@@ -97,9 +91,11 @@ export default function Nav() {
       <div className="fader" />
       <ul>
         {data.allGalleries.map((gallery) => (
-          <Link key={gallery.id} href={`/gallery/${gallery.name}`}>
+          <Link key={gallery.id} href={`/gallery/${slugify(gallery.name)}`}>
             <li
-              className={query.gallerySlug === gallery.name ? 'active' : null}
+              className={
+                query.gallerySlug === slugify(gallery.name) ? 'active' : null
+              }
             >
               {gallery.name}
             </li>
