@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import arrayMove from 'array-move';
 import EasySortNav from './EasySortNav';
-import Button from '../styles/Button';
+import { Button, ExtraInfo } from '../styles';
 import { UPDATE_GALLERY_ORDER_MUTATION } from '../graphql/mutations';
 import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 import { renderSuccessToast } from './toasts';
@@ -21,22 +21,10 @@ const Instructions = styled.p`
   padding-bottom: 30px;
 `;
 
-const ExtraInfo = styled.div`
-  text-align: right;
-  margin: 40px 0 0 0;
-  font-size: 1rem;
-
-  p {
-    margin: 0;
-  }
-`;
-
 export default function EditNavigation() {
-  const {
-    data: queryData,
-    error: queryError,
-    loading: queryLoading,
-  } = useQuery(ALL_PUBLISHED_GALLERIES_QUERY);
+  const { data: queryData, error: queryError } = useQuery(
+    ALL_PUBLISHED_GALLERIES_QUERY
+  );
 
   const [navList, setNavList] = useState(queryData?.allGalleries);
   const onSortEnd = (oldIndex, newIndex) => {
@@ -50,18 +38,18 @@ export default function EditNavigation() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // get the data right for the thing
     const navItemsWithOrder = navList.map((navItem, idx) => ({
       id: navItem.id,
       data: {
         order: idx,
       },
     }));
-    // fire mutation
+
     await updateNavItems({
       variables: { navItemsWithOrder },
       refetchQueries: [{ query: ALL_PUBLISHED_GALLERIES_QUERY }],
     });
+
     renderSuccessToast();
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;

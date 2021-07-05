@@ -4,11 +4,22 @@ export const CREATE_PHOTO_MUTATION = gql`
   mutation CREATE_PHOTO_MUTATION(
     #which variables get passed in!
     $name: String!
+    $alt: String!
     $description: String!
     $image: Upload!
+    $status: String!
+    $background: Boolean
   ) {
     createPhoto(
-      data: { name: $name, description: $description, image: $image }
+      data: {
+        name: $name
+        altText: $alt
+        description: $description
+        image: $image
+        backgroundImage: $background
+        status: $status
+        order: 9000
+      }
     ) {
       id
       description

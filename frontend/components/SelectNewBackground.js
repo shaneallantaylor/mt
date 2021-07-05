@@ -79,9 +79,9 @@ export default function SelectNewBackground({
             key={`label-${photo.id}`}
             checked={newBackground === photo.id}
             htmlFor={photo.id}
-            imageSrc={photo.image.publicUrlTransformed}
+            imageSrc={photo.image?.publicUrlTransformed}
           >
-            <img alt={photo.name} src={photo.image.publicUrlTransformed} />
+            <img alt={photo.name} src={photo.image?.publicUrlTransformed} />
             <StyledInput
               onInput={handleNewBackgroundSelect}
               id={photo.id}

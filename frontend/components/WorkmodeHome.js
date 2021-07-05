@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import {
+  CardContentContainer,
+  RightCaret,
+  WorkList,
+  WorkItem,
+  WorkCard,
+} from '../styles';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -22,71 +29,6 @@ const WorkHeadline = styled.div`
 
   h1 {
     padding-bottom: 16px;
-  }
-`;
-
-const WorkList = styled.ul`
-  list-style: none;
-  padding: 0 0 40px 0;
-  margin: 40px auto 0;
-  max-width: 800px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 20px;
-`;
-
-const WorkItem = styled.li`
-  color: black;
-  background: white;
-  border: 1px solid #e6e6e6;
-  outline: 0px inset black;
-  box-shadow: var(--bs);
-  border-radius: 3px;
-  transition: border-color 0.3s ease;
-
-  &:hover {
-    border-color: var(--black);
-  }
-`;
-
-const WorkCard = styled.div`
-  cursor: pointer;
-  position: relative;
-
-  h6 {
-    margin: 0;
-    padding: 20px 20px 10px;
-    font-size: 1.6rem;
-  }
-
-  p {
-    font-size: 0.8rem;
-    margin: 0;
-    padding: 0 20px 20px;
-    color: #5f5f5f;
-  }
-`;
-
-const CardContentContainer = styled.div`
-  padding-right: 80px;
-`;
-
-const RightCaret = styled.div`
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 50%;
-  right: 30px;
-  border-top: 2px solid black;
-  border-right: 2px solid black;
-  transform: translateY(-50%) rotate(45deg) skew(10deg, 10deg);
-  transition: 0.2s ease;
-
-  ${WorkCard}:hover & {
-    /* border-top-color: var(--primary); */
-    /* border-right-color: var(--primary); */
-    transform: translateY(-50%) rotate(45deg) skew(10deg, 10deg)
-      translate(5px, -5px);
   }
 `;
 

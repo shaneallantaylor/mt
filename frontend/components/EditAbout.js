@@ -7,7 +7,7 @@ import { UPDATE_ABOUT_MUTATION } from '../graphql/mutations';
 import { ABOUT_QUERY, ALL_PHOTOS_QUERY } from '../graphql/queries';
 import Loading from './Loading';
 import Error from './Error';
-import TextArea from './TextArea';
+import { TextArea } from '../styles';
 import { renderSuccessToast } from './toasts';
 import WorkmodeContainer from './WorkmodeContainer';
 import SelectNewBackground from './SelectNewBackground';
@@ -122,7 +122,6 @@ export default function EditAbout() {
             src={aboutData?.about.background.image.publicUrlTransformed}
           />
         </div>
-        {/* { Maybe toggle menu open?} */}
         <ChangeBackgroundContainer open={checked}>
           <ChangeBackgroundToggle
             htmlFor="background-toggle"
