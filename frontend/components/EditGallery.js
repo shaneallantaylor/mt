@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from 'styled-components';
@@ -14,12 +14,15 @@ import Loading from './Loading';
 import Error from './Error';
 import SelectRadios from '../styles/SelectRadios';
 import AddPhotosToGallery from './AddPhotosToGallery';
+import WorkmodeContainer from './WorkmodeContainer';
+import WorkmodeNav from './WorkmodeNav';
+import { RadioOption, TextInput } from '../styles';
 
-const TextInputContainer = styled.div`
-  display: flex;
-  padding-bottom: 20px;
-  border-bottom: 2px solid black;
-  justify-content: space-evenly;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  margin-bottom: 40px;
 `;
 
 const PossiblePhotosContainer = styled.div`
@@ -36,8 +39,6 @@ const AddPhotosToggle = styled.span`
 
 export default function EditGallery({ query }) {
   const { galleryId } = query;
-  const nameInput = useRef(null);
-  const descriptionInput = useRef(null);
   const {
     data: queryData,
     error: queryError,
@@ -60,6 +61,8 @@ export default function EditGallery({ query }) {
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
   const [status, setStatus] = useState(queryData?.gallery?.status);
   const [checkboxes, setCheckboxes] = useState({});
+  const nameInput = useRef(queryData?.gallery?.name);
+  const descriptionInput = useRef(null);
 
   const onSortEnd = (oldIndex, newIndex) => {
     setPhotoList((array) => arrayMove(array, oldIndex, newIndex));
@@ -69,10 +72,6 @@ export default function EditGallery({ query }) {
     updateGallery,
     { loading: mutationLoading, error: mutationError },
   ] = useMutation(UPDATE_GALLERY_MUTATION);
-
-  function handleStatusChange(e) {
-    setStatus(e.target.value);
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -130,59 +129,72 @@ export default function EditGallery({ query }) {
     });
   }
 
+  useEffect(() => {
+    setPhotoList(queryData?.sortedPhotos);
+  }, [queryData?.sortedPhotos]);
+
+  useEffect(() => {
+    setStatus(queryData?.gallery?.status);
+  }, [queryData?.gallery?.status]);
+
   return (
-    <div style={{ color: 'black ' }}>
+    <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit Gallery" />
       <Error content={mutationError || queryError || possiblePhotosError} />
       <Loading size="big" content={mutationLoading || queryLoading} />
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
-        <TextInputContainer>
-          <label htmlFor="name">
-            Name
-            <input
-              ref={nameInput}
-              disabled={queryLoading}
-              aria-busy={queryLoading}
-              id="name"
-              name="name"
-              defaultValue={queryData?.gallery.name}
-            />
-          </label>
-          <label htmlFor="description">
-            Description
-            <input
-              ref={descriptionInput}
-              type="text"
-              id="description"
-              name="description"
-              defaultValue={queryData?.gallery.description}
-            />
-          </label>
-          <SelectRadios>
-            <label htmlFor="status-hidden">
-              Hidden
-              <input
-                type="radio"
-                id="status-hidden"
-                name="status-hidden"
-                value="HIDDEN"
-                checked={status === 'HIDDEN'}
-                onChange={handleStatusChange}
+        <Grid>
+          <div>
+            <label htmlFor="title">
+              <div>Name</div>
+              <TextInput
+                id="title"
+                ref={nameInput}
+                disabled={mutationLoading}
+                aria-busy={mutationLoading}
+                defaultValue={queryData?.gallery?.name}
               />
             </label>
-            <label htmlFor="status-pub">
-              Published
-              <input
-                type="radio"
-                id="status-pub"
-                name="status-pub"
-                value="PUBLISHED"
-                checked={status === 'PUBLISHED'}
-                onChange={handleStatusChange}
+          </div>
+          <div>
+            <label htmlFor="description">
+              <div>Description</div>
+              <TextInput
+                type="text"
+                id="description"
+                ref={descriptionInput}
+                disabled={mutationLoading}
+                aria-busy={mutationLoading}
+                defaultValue={queryData?.gallery?.description}
               />
             </label>
-          </SelectRadios>
-        </TextInputContainer>
-
+          </div>
+          <div>
+            <div>Status</div>
+            <SelectRadios>
+              <RadioOption selected={!status} htmlFor="status-hidden">
+                Hidden
+                <input
+                  type="radio"
+                  id="status-hidden"
+                  name="status"
+                  value="HIDDEN"
+                  onChange={() => setStatus(false)}
+                />
+              </RadioOption>
+              <RadioOption selected={status} htmlFor="status-pub">
+                Published
+                <input
+                  type="radio"
+                  id="status-pub"
+                  name="status"
+                  value="PUBLISHED"
+                  onChange={() => setStatus(true)}
+                />
+              </RadioOption>
+            </SelectRadios>
+          </div>
+        </Grid>
         <PossiblePhotosContainer>
           <AddPhotosToggle role="button" onClick={getPossiblePhotos}>
             Add Photos
@@ -199,10 +211,9 @@ export default function EditGallery({ query }) {
           photos={photoList}
           handleRemovePhoto={handleRemovePhoto}
         />
-
         <Button type="submit">Save Changes</Button>
       </form>
-    </div>
+    </WorkmodeContainer>
   );
 }
 

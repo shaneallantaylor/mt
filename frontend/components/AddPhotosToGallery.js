@@ -50,7 +50,7 @@ export default function AddPhotosToGallery({
       <div>
         {possiblePhotos.possiblePhotos.map((photo) => (
           <StyledLabel key={`label-${photo.id}`} checked={checkboxes[photo.id]}>
-            <img alt={photo.name} src={photo.image.publicUrlTransformed} />
+            <img alt={photo.name} src={photo.image?.publicUrlTransformed} />
             <StyledCheckbox
               onInput={handleCheckboxInputChange}
               id={photo.id}

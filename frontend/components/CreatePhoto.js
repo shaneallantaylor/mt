@@ -44,11 +44,6 @@ export default function CreatePhoto() {
     const description = descriptionInput.current.value;
     const file = fileInput.current.files[0];
 
-    console.log('upon submit, name is', name);
-    console.log('upon submit, nameInput.current is', nameInput.current);
-    console.log('upon submit, alt is', alt);
-    console.log('upon submit, description is', description);
-    console.log('upon submit, file is', file);
     await createPhoto({
       variables: {
         name,
@@ -59,12 +54,12 @@ export default function CreatePhoto() {
         background,
       },
     });
+
     renderSuccessToast();
-    console.log('data after created a new photo is', data);
     formEl.current.reset();
     setPhotoCreated(true);
   }
-  console.log('data just before return of component is', data);
+
   return (
     <WorkmodeContainer>
       <WorkmodeNav pageTitle="Add Photo" />
