@@ -30,7 +30,6 @@ const ImageContainer = styled.div`
   position: relative;
   height: 0;
   padding-top: ${(340 / 227) * 100}%;
-  /* background: linear-gradient(-270deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
   background: linear-gradient(
     270deg,
     #e6e6e6,
@@ -58,7 +57,6 @@ export default function Photo({ id, image, name, gallery }) {
         <ImageContainer>
           <ImageWrapper isLoaded={isLoaded}>
             <Image
-              // layout="fill"
               height="1200"
               width="800"
               objectFit="cover"

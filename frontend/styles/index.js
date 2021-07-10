@@ -5,6 +5,7 @@ import EditGalleryPhotoContainer from './EditGalleryPhotoContainer';
 import ExtraInfo from './ExtraInfo';
 import FileInput from './FileInput';
 import FlexWrapSection from './FlexWrapSection';
+import NotPublishedBanner from './NotPublishedBanner';
 import P from './P';
 import RadioOption from './RadioOption';
 import RightCaret from './RightCaret';
@@ -23,6 +24,7 @@ export {
   ExtraInfo,
   FileInput,
   FlexWrapSection,
+  NotPublishedBanner,
   P,
   RadioOption,
   RightCaret,

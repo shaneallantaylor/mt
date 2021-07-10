@@ -109,8 +109,9 @@ export const GALLERY_QUERY_WITH_SORTED_PHOTOS = gql`
       name
       id
       order
+      status
       image {
-        publicUrlTransformed(transformation: { width: "200" })
+        publicUrlTransformed(transformation: { width: "400" })
       }
     }
   }
