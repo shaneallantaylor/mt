@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Button } from '../styles';
 
-const NewBackgroundContainer = styled.div`
+const AddPhotosContainer = styled.div`
   max-height: ${(props) => (props.open ? '20000px' : '1px')};
   overflow: hidden;
   transition: max-height 0.5s ease;
@@ -8,7 +9,7 @@ const NewBackgroundContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-auto-rows: 1fr;
   grid-auto-flow: dense;
   grid-gap: 20px;
@@ -61,34 +62,36 @@ const StyledInput = styled.input`
   width: 1px;
 `;
 
-export default function SelectNewBackground({
-  handleNewBackgroundSelect,
-  newBackground,
-  backgroundPhotos,
+export default function SelectPhotosToAddToGallery({
+  handleSelect,
+  selectedPhotos,
+  possiblePhotos,
   open,
+  handleAddPhotos,
 }) {
-  if (!backgroundPhotos) return <div />;
+  console.log('selectedPhotos is', selectedPhotos);
+  if (!possiblePhotos) return <div />;
   return (
-    <NewBackgroundContainer open={open}>
-      <p>Pick a photo, hotshot:</p>
+    <AddPhotosContainer open={open}>
       <GridContainer>
-        {backgroundPhotos.allPhotos.map((photo) => (
+        {possiblePhotos.possiblePhotos.map((photo) => (
           <StyledLabel
             key={`label-${photo.id}`}
-            checked={newBackground === photo.id}
+            checked={selectedPhotos[photo.id]?.checked}
             htmlFor={photo.id}
             imageSrc={photo.image?.publicUrlTransformed}
           >
             <img alt={photo.name} src={photo.image?.publicUrlTransformed} />
             <StyledInput
-              onInput={handleNewBackgroundSelect}
+              onInput={handleSelect}
               id={photo.id}
-              data-photoid={photo.id}
-              type="radio"
+              data-photo={JSON.stringify(photo)}
+              type="checkbox"
             />
           </StyledLabel>
         ))}
       </GridContainer>
-    </NewBackgroundContainer>
+      <Button onClick={handleAddPhotos}>Add These Photos</Button>
+    </AddPhotosContainer>
   );
 }

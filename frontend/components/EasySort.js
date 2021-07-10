@@ -65,7 +65,6 @@ const RemoveButton = styled(Button)`
 export default function EasySort({ photos, onSortEnd, handleRemovePhoto }) {
   if (!photos) return null;
 
-  console.log('photos[0] is', photos[0]);
   return (
     <SortableStlyes>
       <SortableList

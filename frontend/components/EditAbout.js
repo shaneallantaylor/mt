@@ -73,7 +73,6 @@ export default function EditAbout() {
     setNewBackground(e.target.dataset.photoid);
   }
 
-  // UPDATE ABOUT PAGE
   const [
     updateAbout,
     { loading: mutationLoading, error: mutationError },

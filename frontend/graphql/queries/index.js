@@ -162,6 +162,7 @@ export const GET_PHOTOS_WITH_NO_GALLERY = gql`
       name
       id
       order
+      status
       image {
         publicUrlTransformed
       }

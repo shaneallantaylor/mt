@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
@@ -13,10 +13,11 @@ import {
 import Loading from './Loading';
 import Error from './Error';
 import SelectRadios from '../styles/SelectRadios';
-import AddPhotosToGallery from './AddPhotosToGallery';
 import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
 import { RadioOption, TextInput } from '../styles';
+import SelectPhotosToAddToGallery from './SelectPhotosToAddToGallery';
+import { renderSuccessToast } from './toasts';
 
 const Grid = styled.div`
   display: grid;
@@ -25,15 +26,39 @@ const Grid = styled.div`
   margin-bottom: 40px;
 `;
 
-const PossiblePhotosContainer = styled.div`
-  background: green;
+const ChangeBackgroundContainer = styled.div`
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-bottom: ${({ open }) => (open ? '20px' : '0px')};
 `;
 
-const AddPhotosToggle = styled.span`
+const ChangeBackgroundToggle = styled.label`
+  cursor: pointer;
+  display: block;
+  position: relative;
+
   &:after {
     content: '<';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
     width: 20px;
     height: 20px;
+    transition: transform 0.5s ease;
+    transform: ${({ checked }) =>
+      checked ? 'rotate(-90deg) translate(-10px, -15px) ' : 'none'};
+  }
+
+  input {
+    border: 0px;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 `;
 
@@ -49,20 +74,23 @@ export default function EditGallery({ query }) {
     },
   });
 
-  const [
-    getPossiblePhotos,
-    {
-      data: possiblePhotos,
-      loading: possiblePhotosLoading,
-      error: possiblePhotosError,
-    },
-  ] = useLazyQuery(GET_PHOTOS_WITH_NO_GALLERY);
+  const {
+    data: possiblePhotos,
+    loading: possiblePhotosLoading,
+    error: possiblePhotosError,
+  } = useQuery(GET_PHOTOS_WITH_NO_GALLERY);
 
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
   const [status, setStatus] = useState(queryData?.gallery?.status);
-  const [checkboxes, setCheckboxes] = useState({});
+  const [selectedPhotos, setSelectedPhotos] = useState({});
+  const [addPhotosChecked, setAddPhotosChecked] = useState(false);
   const nameInput = useRef(queryData?.gallery?.name);
   const descriptionInput = useRef(null);
+  const pageContainerRef = useRef(null);
+
+  function handleChangeBackgroundToggle(e) {
+    setAddPhotosChecked(e.target.checked);
+  }
 
   const onSortEnd = (oldIndex, newIndex) => {
     setPhotoList((array) => arrayMove(array, oldIndex, newIndex));
@@ -96,14 +124,22 @@ export default function EditGallery({ query }) {
         photosToConnect,
         photosWithOrder,
       },
+      refetchQueries: [
+        {
+          query: GALLERY_QUERY_WITH_SORTED_PHOTOS,
+          variables: {
+            id: galleryId,
+          },
+        },
+      ],
     });
-    // ! Add toast for success
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    renderSuccessToast();
+    setAddPhotosChecked(false);
   }
 
-  function handleAddPhotos() {
-    const checkedPhotos = Object.entries(checkboxes)
+  function handleAddPhotos(e) {
+    e.preventDefault();
+    const checkedPhotos = Object.entries(selectedPhotos)
       .filter(([_, { checked }]) => checked === true)
       .map(([_, { photo }]) => photo);
     const newPhotoList = [...checkedPhotos, ...photoList];
@@ -119,9 +155,9 @@ export default function EditGallery({ query }) {
     console.log('you attemped to remove');
   }
 
-  function handleCheckboxInputChange(e) {
-    setCheckboxes({
-      ...checkboxes,
+  function handleSelect(e) {
+    setSelectedPhotos({
+      ...selectedPhotos,
       [e.target.id]: {
         checked: e.target.checked,
         photo: JSON.parse(e.target.dataset.photo),
@@ -138,7 +174,7 @@ export default function EditGallery({ query }) {
   }, [queryData?.gallery?.status]);
 
   return (
-    <WorkmodeContainer>
+    <WorkmodeContainer ref={pageContainerRef}>
       <WorkmodeNav pageTitle="Edit Gallery" />
       <Error content={mutationError || queryError || possiblePhotosError} />
       <Loading size="big" content={mutationLoading || queryLoading} />
@@ -195,17 +231,23 @@ export default function EditGallery({ query }) {
             </SelectRadios>
           </div>
         </Grid>
-        <PossiblePhotosContainer>
-          <AddPhotosToggle role="button" onClick={getPossiblePhotos}>
+        <ChangeBackgroundContainer open={addPhotosChecked}>
+          <ChangeBackgroundToggle
+            htmlFor="background-toggle"
+            checked={addPhotosChecked}
+            onInput={handleChangeBackgroundToggle}
+          >
             Add Photos
-          </AddPhotosToggle>
-          <AddPhotosToGallery
-            handleCheckboxInputChange={handleCheckboxInputChange}
-            handleAddPhotos={handleAddPhotos}
-            checkboxes={checkboxes}
+            <input id="background-toggle" type="checkbox" />
+          </ChangeBackgroundToggle>
+          <SelectPhotosToAddToGallery
+            open={addPhotosChecked}
+            handleSelect={handleSelect}
+            selectedPhotos={selectedPhotos}
             possiblePhotos={possiblePhotos}
+            handleAddPhotos={handleAddPhotos}
           />
-        </PossiblePhotosContainer>
+        </ChangeBackgroundContainer>
         <EasySort
           onSortEnd={onSortEnd}
           photos={photoList}
