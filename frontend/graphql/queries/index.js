@@ -123,6 +123,8 @@ export const PHOTO_QUERY = gql`
       name
       description
       altText
+      status
+      backgroundImage
       gallery {
         name
       }

@@ -3,10 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import EasySort from './EasySort';
 import Button from '../styles/Button';
-import { UPDATE_GALLERY_MUTATION } from '../graphql/mutations';
 import {
+  DELETE_GALLERY_MUTATION,
+  UPDATE_GALLERY_MUTATION,
+} from '../graphql/mutations';
+import {
+  ALL_GALLERIES_QUERY,
+  ALL_PUBLISHED_GALLERIES_QUERY,
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
   GET_PHOTOS_WITH_NO_GALLERY,
 } from '../graphql/queries';
@@ -15,7 +21,12 @@ import Error from './Error';
 import SelectRadios from '../styles/SelectRadios';
 import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
-import { RadioOption, TextInput } from '../styles';
+import {
+  DestructiveButton,
+  FlexSpaceBetween,
+  RadioOption,
+  TextInput,
+} from '../styles';
 import SelectPhotosToAddToGallery from './SelectPhotosToAddToGallery';
 import { renderSuccessToast } from './toasts';
 
@@ -81,12 +92,15 @@ export default function EditGallery({ query }) {
   } = useQuery(GET_PHOTOS_WITH_NO_GALLERY);
 
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
-  const [status, setStatus] = useState(queryData?.gallery?.status);
+  const [status, setStatus] = useState(queryData?.gallery?.status !== 'HIDDEN');
   const [selectedPhotos, setSelectedPhotos] = useState({});
   const [addPhotosChecked, setAddPhotosChecked] = useState(false);
   const nameInput = useRef(queryData?.gallery?.name);
   const descriptionInput = useRef(null);
-  const pageContainerRef = useRef(null);
+  const router = useRouter();
+
+  console.log('queryData?.gallery?.status is', queryData?.gallery?.status);
+  console.log('status is', status);
 
   function handleChangeBackgroundToggle(e) {
     setAddPhotosChecked(e.target.checked);
@@ -100,6 +114,11 @@ export default function EditGallery({ query }) {
     updateGallery,
     { loading: mutationLoading, error: mutationError },
   ] = useMutation(UPDATE_GALLERY_MUTATION);
+
+  const [
+    deleteGallery,
+    { loading: deleteLoading, error: deleteError },
+  ] = useMutation(DELETE_GALLERY_MUTATION);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -115,12 +134,13 @@ export default function EditGallery({ query }) {
         order: idx,
       },
     }));
+
     await updateGallery({
       variables: {
         galleryId,
         galleryName,
         galleryDescription,
-        galleryStatus: status,
+        galleryStatus: status ? 'PUBLISHED' : 'HIDDEN',
         photosToConnect,
         photosWithOrder,
       },
@@ -131,6 +151,7 @@ export default function EditGallery({ query }) {
             id: galleryId,
           },
         },
+        { query: ALL_PUBLISHED_GALLERIES_QUERY },
       ],
     });
     renderSuccessToast();
@@ -165,16 +186,32 @@ export default function EditGallery({ query }) {
     });
   }
 
+  async function handleDeleteGallery(e) {
+    e.preventDefault();
+    if (window.confirm('Are you sure you want to delete the gallery?')) {
+      console.log('you really want to delete it');
+      await deleteGallery({
+        variables: {
+          id: galleryId,
+        },
+        refetchQueries: [{ query: ALL_GALLERIES_QUERY }],
+      });
+      router.replace('/workmode/gallery');
+    } else {
+      console.log('NVM, doing nothing');
+    }
+  }
+
   useEffect(() => {
     setPhotoList(queryData?.sortedPhotos);
   }, [queryData?.sortedPhotos]);
 
   useEffect(() => {
-    setStatus(queryData?.gallery?.status);
+    setStatus(queryData?.gallery?.status !== 'HIDDEN');
   }, [queryData?.gallery?.status]);
 
   return (
-    <WorkmodeContainer ref={pageContainerRef}>
+    <WorkmodeContainer>
       <WorkmodeNav pageTitle="Edit Gallery" />
       <Error content={mutationError || queryError || possiblePhotosError} />
       <Loading size="big" content={mutationLoading || queryLoading} />
@@ -184,6 +221,7 @@ export default function EditGallery({ query }) {
             <label htmlFor="title">
               <div>Name</div>
               <TextInput
+                type="text"
                 id="title"
                 ref={nameInput}
                 disabled={mutationLoading}
@@ -253,7 +291,12 @@ export default function EditGallery({ query }) {
           photos={photoList}
           handleRemovePhoto={handleRemovePhoto}
         />
-        <Button type="submit">Save Changes</Button>
+        <FlexSpaceBetween>
+          <Button type="submit">Save Changes</Button>
+          <DestructiveButton type="button" onClick={handleDeleteGallery}>
+            Delete Gallery
+          </DestructiveButton>
+        </FlexSpaceBetween>
       </form>
     </WorkmodeContainer>
   );

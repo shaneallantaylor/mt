@@ -1,9 +1,11 @@
 import Button from './Button';
 import CardContentContainer from './CardContentContainer';
 import CatalogStyles from './CatalogStyles';
+import DestructiveButton from './DestructiveButton';
 import EditGalleryPhotoContainer from './EditGalleryPhotoContainer';
 import ExtraInfo from './ExtraInfo';
 import FileInput from './FileInput';
+import FlexSpaceBetween from './FlexSpaceBetween';
 import FlexWrapSection from './FlexWrapSection';
 import NotPublishedBanner from './NotPublishedBanner';
 import P from './P';
@@ -20,9 +22,11 @@ export {
   Button,
   CardContentContainer,
   CatalogStyles,
+  DestructiveButton,
   EditGalleryPhotoContainer,
   ExtraInfo,
   FileInput,
+  FlexSpaceBetween,
   FlexWrapSection,
   NotPublishedBanner,
   P,

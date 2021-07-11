@@ -6,17 +6,14 @@ import WorkmodeNav from './WorkmodeNav';
 import { ExtraInfo, RightCaret, WorkCard, WorkItem, WorkList } from '../styles';
 
 export default function SelectGalleryToEdit() {
-  const { data, error, loading } = useQuery(ALL_GALLERIES_QUERY);
-
-  if (loading) return <p>We are loading</p>;
-  if (error) return <p>We are error!</p>;
+  const { data } = useQuery(ALL_GALLERIES_QUERY);
 
   return (
     <WorkmodeContainer>
       <WorkmodeNav pageTitle="Edit Galleries" />
       <section>
         <WorkList>
-          {data.allGalleries.map((gallery) => (
+          {data?.allGalleries.map((gallery) => (
             <WorkItem key={gallery.id}>
               <Link href={`/workmode/gallery/${gallery.id}`}>
                 <WorkCard>

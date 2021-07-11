@@ -57,10 +57,10 @@ export default function WorkmodeHome() {
           </Link>
         </WorkItem>
         <WorkItem>
-          <Link href="/workmode/gallery">
+          <Link href="/workmode/gallery/create">
             <WorkCard>
               <CardContentContainer>
-                <h6>Add Gallery</h6>
+                <h6>Create Gallery</h6>
                 <p>Make a new gallery!</p>
               </CardContentContainer>
               <RightCaret />

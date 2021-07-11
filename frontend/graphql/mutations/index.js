@@ -51,11 +51,19 @@ export const UPDATE_PHOTO_MUTATION = gql`
     $id: ID!
     $name: String
     $description: String
-    $altText: String
+    $alt: String
+    $status: String
+    $background: Boolean
   ) {
     updatePhoto(
       id: $id
-      data: { name: $name, description: $description, altText: $altText }
+      data: {
+        name: $name
+        altText: $alt
+        description: $description
+        backgroundImage: $background
+        status: $status
+      }
     ) {
       id
       name
@@ -76,14 +84,38 @@ export const DELETE_PHOTO_MUTATION = gql`
   }
 `;
 
+export const CREATE_GALLERY_MUTATION = gql`
+  mutation CREATE_GALLERY_MUTATION(
+    $name: String!
+    $description: String
+    $status: String!
+  ) {
+    createGallery(
+      data: {
+        name: $name
+        status: $status
+        order: 9000
+        description: $description
+      }
+    ) {
+      id
+      name
+      description
+      slug
+      status
+      order
+    }
+  }
+`;
+
 export const UPDATE_GALLERY_MUTATION = gql`
   mutation UPDATE_GALLERY_MUTATION(
     $galleryId: ID!
     $galleryName: String
     $galleryDescription: String
     $galleryStatus: String
-    $photosToConnect: [PhotoWhereUniqueInput]!
-    $photosWithOrder: [PhotosUpdateInput]!
+    $photosToConnect: [PhotoWhereUniqueInput]
+    $photosWithOrder: [PhotosUpdateInput]
   ) {
     updateGallery(
       id: $galleryId
@@ -114,6 +146,14 @@ export const UPDATE_GALLERY_ORDER_MUTATION = gql`
       id
       name
       order
+    }
+  }
+`;
+
+export const DELETE_GALLERY_MUTATION = gql`
+  mutation DELETE_GALLERY_MUTATION($id: ID!) {
+    deleteGallery(id: $id) {
+      name
     }
   }
 `;
