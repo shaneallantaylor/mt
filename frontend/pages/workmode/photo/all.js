@@ -1,11 +1,11 @@
-import AllPhotos from '../../../components/AllPhotos';
+import SelectPhotoToEdit from '../../../components/SelectPhotoToEdit';
 import PleaseSignIn from '../../../components/PleaseSignIn';
 
 export default function AddPhotoPage() {
   return (
     <>
       <PleaseSignIn>
-        <AllPhotos />
+        <SelectPhotoToEdit />
       </PleaseSignIn>
     </>
   );

@@ -1,6 +1,11 @@
+import { useMutation } from '@apollo/client';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { DELETE_PHOTO_MUTATION } from '../graphql/mutations';
+import { ALL_PHOTOS_QUERY } from '../graphql/queries';
+import { DestructiveButton } from '../styles';
 import Button from '../styles/Button';
+import { renderSuccessToast } from './toasts';
 
 const CardsContainer = styled.div`
   display: grid;
@@ -69,22 +74,32 @@ const ActionsContainer = styled.div`
   margin-left: 50px;
 `;
 
-const DeleteButton = styled(Button)`
-  background: red;
-  height: 30px;
-  width: 80px;
-  margin-top: 4px;
-`;
-
-const EditButton = styled(Button)`
-  height: 30px;
-  width: 80px;
-  background: var(--primary);
-`;
-
 export default function PhotoCards({ allPhotos }) {
-  console.log('allPhotos', allPhotos);
+  const [
+    deletePhoto,
+    { loading: deleteLoading, error: deleteError },
+  ] = useMutation(DELETE_PHOTO_MUTATION);
+
   const photos = allPhotos?.allPhotos || [];
+
+  async function handleDeletePhoto(e) {
+    e.preventDefault();
+    const photoId = e.target.dataset.photoid;
+
+    // Get the photo ID
+    if (window.confirm('Are you sure you want to delete the photo?')) {
+      await deletePhoto({
+        variables: {
+          id: photoId,
+        },
+        refetchQueries: [{ query: ALL_PHOTOS_QUERY }],
+      });
+      renderSuccessToast();
+    } else {
+      console.log('NVM, doing nothing');
+    }
+  }
+
   const photoCards = photos.map((photo) => (
     <Card>
       <ImageContainer>
@@ -99,9 +114,17 @@ export default function PhotoCards({ allPhotos }) {
         </div>
         <ActionsContainer>
           <Link href={`/workmode/photo/${photo.id}`}>
-            <EditButton>Edit</EditButton>
+            <Button style={{ height: '30px', marginBottom: '10px' }}>
+              Edit
+            </Button>
           </Link>
-          <DeleteButton>Delete</DeleteButton>
+          <DestructiveButton
+            onClick={handleDeletePhoto}
+            style={{ height: '25px', width: '70px' }}
+            data-photoid={photo.id}
+          >
+            Delete
+          </DestructiveButton>
         </ActionsContainer>
       </TextContainer>
     </Card>

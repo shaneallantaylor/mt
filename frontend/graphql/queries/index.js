@@ -146,10 +146,10 @@ export const SEARCH_PHOTOS_QUERY = gql`
       }
     ) {
       id
-      description
       name
+      status
       image {
-        publicUrlTransformed
+        publicUrlTransformed(transformation: { width: "400" })
       }
     }
   }

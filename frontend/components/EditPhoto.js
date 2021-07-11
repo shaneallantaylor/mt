@@ -40,10 +40,6 @@ export default function EditPhoto({ query: { photoId } }) {
   const [background, setBackground] = useState(data?.photo?.backgroundImage);
   const [status, setStatus] = useState(data?.photo?.status !== 'HIDDEN');
 
-  console.log('background is', background);
-  console.log('data?.photo?.backgroundImage is', data?.photo?.backgroundImage);
-  console.log('data is', data);
-
   const [
     updatePhoto,
     { loading: mutationLoading, error: mutationError },

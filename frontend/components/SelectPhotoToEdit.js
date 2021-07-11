@@ -5,7 +5,7 @@ import { ALL_PHOTOS_QUERY } from '../graphql/queries';
 import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
 
-export default function AllPhotos() {
+export default function SelectPhotoToEdit() {
   const {
     data: allPhotos,
     error: allPhotosError,
@@ -15,7 +15,6 @@ export default function AllPhotos() {
   return (
     <WorkmodeContainer>
       <WorkmodeNav pageTitle="Edit Photos" />
-      <Search />
       <PhotoCards allPhotos={allPhotos} />
     </WorkmodeContainer>
   );
