@@ -19,7 +19,6 @@ export default function SignIn() {
         password: passwordInput.current.value,
       },
     });
-    console.log(res);
   }
   const error =
     data?.authenticateUserWithPassword.__typename ===
