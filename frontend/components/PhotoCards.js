@@ -103,7 +103,6 @@ export default function PhotoCards({ allPhotos }) {
     e.preventDefault();
     const photoId = e.target.dataset.photoid;
 
-    // Get the photo ID
     if (window.confirm('Are you sure you want to delete the photo?')) {
       await deletePhoto({
         variables: {

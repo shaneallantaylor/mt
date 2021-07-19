@@ -95,9 +95,6 @@ export default function EditGallery({ query }) {
   const descriptionInput = useRef(null);
   const router = useRouter();
 
-  console.log('queryData?.gallery?.status is', queryData?.gallery?.status);
-  console.log('status is', status);
-
   function handleChangeBackgroundToggle(e) {
     setAddPhotosChecked(e.target.checked);
   }
