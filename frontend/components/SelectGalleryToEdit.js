@@ -16,7 +16,7 @@ export default function SelectGalleryToEdit() {
           {data?.allGalleries.map((gallery) => (
             <WorkItem key={gallery.id}>
               <Link href={`/workmode/gallery/${gallery.id}`}>
-                <WorkCard>
+                <WorkCard gallery published={gallery.status === 'PUBLISHED'}>
                   <h6>{gallery.name}</h6>
                   <RightCaret />
                 </WorkCard>

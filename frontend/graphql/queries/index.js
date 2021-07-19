@@ -55,6 +55,7 @@ export const ALL_GALLERIES_QUERY = gql`
     allGalleries(sortBy: name_ASC) {
       id
       description
+      status
       name
     }
   }
