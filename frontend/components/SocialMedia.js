@@ -30,7 +30,6 @@ const EmailContainer = styled.div`
   text-align: center;
   overflow: hidden;
   font-size: 0.8rem;
-  user-select: none;
 `;
 
 export default function SocialMedia() {

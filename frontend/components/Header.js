@@ -23,6 +23,7 @@ const Logo = styled.h1`
   margin: 10px 0 0 0;
   line-height: 0;
   max-height: 45px;
+  cursor: pointer;
   img {
     object-fit: scale-down;
   }
