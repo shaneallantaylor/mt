@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
+import { useRouter } from 'next/router';
 import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/router';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -65,7 +65,7 @@ const MainStyles = styled.main`
 
 export default function Layout({ children }) {
   const router = useRouter();
-  console.log('router is', router);
+
   return (
     <>
       <GlobalStyles isAboutPage={router.pathname === '/about'} />
