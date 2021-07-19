@@ -37,7 +37,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Noto Sans JP', sans-serif;
     color: var(--white);
     background: var(--white);
-    height: ${({ isAboutPage }) => (isAboutPage ? '100%' : undefined)};
+    height: ${({ isWorkmodePage }) => (isWorkmodePage ? undefined : '100%')};
   }
 
   #__next {
@@ -68,7 +68,7 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <GlobalStyles isAboutPage={router.pathname === '/about'} />
+      <GlobalStyles isWorkmodePage={router.pathname.includes('/workmode')} />
       <Header />
       <MainStyles>{children}</MainStyles>
       <ToastContainer
