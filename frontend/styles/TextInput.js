@@ -12,7 +12,6 @@ const TextInput = styled.input`
   border: 2px solid #c7c7c7;
   border-radius: 4px;
   background: #f5f5f5;
-  /* transition: all 0.3s ease; */
 
   &:focus-visible {
     outline: var(--primary) auto 1px;

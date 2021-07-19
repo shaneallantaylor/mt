@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Button } from '../styles';
 
 const AddPhotosContainer = styled.div`
@@ -69,7 +70,6 @@ export default function SelectPhotosToAddToGallery({
   open,
   handleAddPhotos,
 }) {
-  console.log('selectedPhotos is', selectedPhotos);
   if (!possiblePhotos) return <div />;
   return (
     <AddPhotosContainer open={open}>
@@ -95,3 +95,11 @@ export default function SelectPhotosToAddToGallery({
     </AddPhotosContainer>
   );
 }
+
+SelectPhotosToAddToGallery.propTypes = {
+  handleSelect: PropTypes.func,
+  selectedPhotos: PropTypes.object,
+  possiblePhotos: PropTypes.array,
+  handleAddPhotos: PropTypes.func,
+  open: PropTypes.bool,
+};

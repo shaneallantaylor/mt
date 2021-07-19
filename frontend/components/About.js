@@ -18,8 +18,6 @@ const AboutContainer = styled.div`
 `;
 
 const TextContainer = styled.div`
-  /* background: var(--white); */
-  /* opacity: 0.4; */
   max-width: 720px;
 
   p {
@@ -40,11 +38,7 @@ const SocialMediaContainer = styled.div`
 `;
 
 export default function About() {
-  const {
-    data: aboutData,
-    error: aboutError,
-    loading: aboutLoading,
-  } = useQuery(ABOUT_QUERY);
+  const { data: aboutData } = useQuery(ABOUT_QUERY);
 
   return (
     <AboutContainer

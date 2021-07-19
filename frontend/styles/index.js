@@ -17,6 +17,7 @@ import TextInput from './TextInput';
 import WorkCard from './WorkCard';
 import WorkItem from './WorkItem';
 import WorkList from './WorkList';
+import WorkmodeContainer from './WorkmodeContainer';
 
 export {
   Button,
@@ -38,4 +39,5 @@ export {
   WorkCard,
   WorkItem,
   WorkList,
+  WorkmodeContainer,
 };

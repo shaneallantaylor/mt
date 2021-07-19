@@ -1,8 +1,5 @@
-// External
 import Link from 'next/link';
 import styled from 'styled-components';
-
-// Internal
 import Nav from './Nav';
 import breakpoints from '../theme/breakpoints';
 

@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { slugify } from '../lib';
 
 const loading = keyframes`
 	0% {
@@ -53,7 +55,7 @@ export default function Photo({ id, image, name, gallery }) {
 
   return (
     <WrapperStandard>
-      <Link href={`${gallery.name}/photo/${id}`}>
+      <Link href={`${slugify(gallery.name)}/photo/${id}`}>
         <ImageContainer>
           <ImageWrapper isLoaded={isLoaded}>
             <Image
@@ -71,3 +73,10 @@ export default function Photo({ id, image, name, gallery }) {
     </WrapperStandard>
   );
 }
+
+Photo.propTypes = {
+  id: PropTypes.string,
+  image: PropTypes.object,
+  name: PropTypes.string,
+  gallery: PropTypes.object,
+};

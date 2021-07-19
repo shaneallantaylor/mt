@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const NewBackgroundContainer = styled.div`
   max-height: ${(props) => (props.open ? '20000px' : '1px')};
@@ -92,3 +93,10 @@ export default function SelectNewBackground({
     </NewBackgroundContainer>
   );
 }
+
+SelectNewBackground.propTypes = {
+  handleNewBackgroundSelect: PropTypes.func,
+  newBackground: PropTypes.string,
+  backgroundPhotos: PropTypes.array,
+  open: PropTypes.bool,
+};

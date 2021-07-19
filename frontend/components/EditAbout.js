@@ -1,15 +1,11 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '../styles/Button';
 import { UPDATE_ABOUT_MUTATION } from '../graphql/mutations';
 import { ABOUT_QUERY, ALL_PHOTOS_QUERY } from '../graphql/queries';
-import Loading from './Loading';
-import Error from './Error';
-import { TextArea } from '../styles';
+import { TextArea, WorkmodeContainer } from '../styles';
 import { renderSuccessToast } from './toasts';
-import WorkmodeContainer from './WorkmodeContainer';
 import SelectNewBackground from './SelectNewBackground';
 import WorkmodeNav from './WorkmodeNav';
 
@@ -58,12 +54,8 @@ export default function EditAbout() {
     error: aboutError,
     loading: aboutLoading,
   } = useQuery(ABOUT_QUERY);
-  // PHOTOS FOR BACKGROUND CHANGE
-  const {
-    data: backgroundPhotos,
-    loading: possiblePhotosLoading,
-    error: possiblePhotosError,
-  } = useQuery(ALL_PHOTOS_QUERY);
+
+  const { data: backgroundPhotos } = useQuery(ALL_PHOTOS_QUERY);
 
   function handleChangeBackgroundToggle(e) {
     setChecked(e.target.checked);
@@ -91,16 +83,13 @@ export default function EditAbout() {
       refetchQueries: [{ query: ABOUT_QUERY }],
     });
     renderSuccessToast();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   if (aboutError || mutationError) return null;
   return (
     <WorkmodeContainer>
       <WorkmodeNav pageTitle="Edit About" />
-      <Error content={mutationError || aboutError} />
-      <Loading size="big" content={mutationLoading || aboutLoading} />
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
         <div>
           <label htmlFor="about-text">
@@ -144,5 +133,3 @@ export default function EditAbout() {
     </WorkmodeContainer>
   );
 }
-
-EditAbout.propTypes = {};

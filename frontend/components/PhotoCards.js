@@ -1,10 +1,10 @@
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { DELETE_PHOTO_MUTATION } from '../graphql/mutations';
 import { ALL_PHOTOS_QUERY } from '../graphql/queries';
-import { DestructiveButton } from '../styles';
-import Button from '../styles/Button';
+import { DestructiveButton, Button } from '../styles';
 import { renderSuccessToast } from './toasts';
 
 const CardsContainer = styled.div`
@@ -152,3 +152,7 @@ export default function PhotoCards({ allPhotos }) {
   if (!allPhotos) return null;
   return <CardsContainer>{photoCards}</CardsContainer>;
 }
+
+PhotoCards.propTypes = {
+  allPhotos: PropTypes.array,
+};

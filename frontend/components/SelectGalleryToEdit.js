@@ -1,9 +1,15 @@
 import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { ALL_GALLERIES_QUERY } from '../graphql/queries';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
-import { ExtraInfo, RightCaret, WorkCard, WorkItem, WorkList } from '../styles';
+import {
+  ExtraInfo,
+  RightCaret,
+  WorkCard,
+  WorkItem,
+  WorkList,
+  WorkmodeContainer,
+} from '../styles';
 
 export default function SelectGalleryToEdit() {
   const { data } = useQuery(ALL_GALLERIES_QUERY);

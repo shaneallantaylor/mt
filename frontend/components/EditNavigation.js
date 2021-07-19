@@ -1,15 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Link from 'next/link';
 import arrayMove from 'array-move';
 import EasySortNav from './EasySortNav';
-import { Button, ExtraInfo } from '../styles';
+import { Button, ExtraInfo, WorkmodeContainer } from '../styles';
 import { UPDATE_GALLERY_ORDER_MUTATION } from '../graphql/mutations';
 import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 import { renderSuccessToast } from './toasts';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
 
 const Instructions = styled.p`
@@ -51,8 +49,7 @@ export default function EditNavigation() {
     });
 
     renderSuccessToast();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   if (queryError || mutationError) return null;
@@ -83,5 +80,3 @@ export default function EditNavigation() {
     </WorkmodeContainer>
   );
 }
-
-EditNavigation.propTypes = {};

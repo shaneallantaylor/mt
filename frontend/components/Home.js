@@ -23,7 +23,6 @@ const HomeStyles = styled.div`
 
 export default function Home() {
   const { data, loading } = useQuery(ALL_HOMEPAGE_BACKGROUNDS_QUERY);
-  // SELECT ONE (random or specific)
   if (loading) return null;
   const shuffledArray = shuffleArray(data.backgroundPhotos);
   return (

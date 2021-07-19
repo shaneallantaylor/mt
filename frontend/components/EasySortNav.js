@@ -1,5 +1,6 @@
 import SortableList, { SortableItem } from 'react-easy-sort';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const SortableStlyes = styled.div`
   .list {
@@ -60,3 +61,8 @@ export default function EasySortNav({ navItems, onSortEnd }) {
     </SortableStlyes>
   );
 }
+
+EasySortNav.propTypes = {
+  navItems: PropTypes.array,
+  onSortEnd: PropTypes.func,
+};

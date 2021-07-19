@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { ALL_PUBLISHED_GALLERIES_QUERY } from '../graphql/queries';
 import { CREATE_GALLERY_MUTATION } from '../graphql/mutations';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
+import { renderSuccessToast } from './toasts';
 import {
   Button,
   ExtraInfo,
   RadioOption,
   SelectRadios,
   TextInput,
+  WorkmodeContainer,
 } from '../styles';
-import { renderSuccessToast } from './toasts';
 
 const Grid = styled.div`
   display: grid;

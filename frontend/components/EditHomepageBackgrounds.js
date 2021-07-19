@@ -1,15 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { useState } from 'react';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 import Button from '../styles/Button';
 import { UPDATE_HOMEPAGE_BACKGROUNDS } from '../graphql/mutations';
 import { ALL_PHOTOS_QUERY } from '../graphql/queries';
 import { renderSuccessToast } from './toasts';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
 import BackgroundsTable from './BackgroundsTable';
-import { ExtraInfo } from '../styles';
+import { ExtraInfo, WorkmodeContainer } from '../styles';
 
 export default function EditHomepageBackgrounds() {
   const { data } = useQuery(ALL_PHOTOS_QUERY);
@@ -45,8 +43,7 @@ export default function EditHomepageBackgrounds() {
       refetchQueries: [{ query: ALL_PHOTOS_QUERY }],
     });
     renderSuccessToast();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function hydratePhotosToUpdate(array) {
@@ -85,5 +82,3 @@ export default function EditHomepageBackgrounds() {
     </WorkmodeContainer>
   );
 }
-
-EditHomepageBackgrounds.propTypes = {};

@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { useRef } from 'react';
 import { SIGNIN_MUTATION } from '../graphql/mutations';
 import { CURRENT_USER_QUERY } from '../graphql/queries';
-import Error from './Error';
 
 export default function SignIn() {
   const emailInput = useRef(null);
@@ -29,7 +28,6 @@ export default function SignIn() {
   return (
     <form method="POST" onSubmit={handleSubmit}>
       <h2>Sign Into Your Account</h2>
-      <Error content={error} />
       <fieldset>
         <label>
           Email

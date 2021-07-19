@@ -16,19 +16,17 @@ import {
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
   GET_PHOTOS_WITH_NO_GALLERY,
 } from '../graphql/queries';
-import Loading from './Loading';
-import Error from './Error';
 import SelectRadios from '../styles/SelectRadios';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
+import SelectPhotosToAddToGallery from './SelectPhotosToAddToGallery';
+import { renderSuccessToast } from './toasts';
 import {
   DestructiveButton,
   FlexSpaceBetween,
   RadioOption,
   TextInput,
+  WorkmodeContainer,
 } from '../styles';
-import SelectPhotosToAddToGallery from './SelectPhotosToAddToGallery';
-import { renderSuccessToast } from './toasts';
 
 const Grid = styled.div`
   display: grid;
@@ -85,11 +83,9 @@ export default function EditGallery({ query }) {
     },
   });
 
-  const {
-    data: possiblePhotos,
-    loading: possiblePhotosLoading,
-    error: possiblePhotosError,
-  } = useQuery(GET_PHOTOS_WITH_NO_GALLERY);
+  const { data: possiblePhotos, error: possiblePhotosError } = useQuery(
+    GET_PHOTOS_WITH_NO_GALLERY
+  );
 
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
   const [status, setStatus] = useState(queryData?.gallery?.status !== 'HIDDEN');
@@ -168,12 +164,10 @@ export default function EditGallery({ query }) {
   }
 
   function handleRemovePhoto(e) {
-    console.log('e.target.dataset.idx', e.target.dataset.idx);
     const index = parseInt(e.target.dataset.idx);
     const newPhotoList = [...photoList];
     newPhotoList.splice(index, 1);
     setPhotoList(newPhotoList);
-    console.log('you attemped to remove');
   }
 
   function handleSelect(e) {
@@ -189,7 +183,6 @@ export default function EditGallery({ query }) {
   async function handleDeleteGallery(e) {
     e.preventDefault();
     if (window.confirm('Are you sure you want to delete the gallery?')) {
-      console.log('you really want to delete it');
       await deleteGallery({
         variables: {
           id: galleryId,
@@ -213,8 +206,6 @@ export default function EditGallery({ query }) {
   return (
     <WorkmodeContainer>
       <WorkmodeNav pageTitle="Edit Gallery" />
-      <Error content={mutationError || queryError || possiblePhotosError} />
-      <Loading size="big" content={mutationLoading || queryLoading} />
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
         <Grid>
           <div>

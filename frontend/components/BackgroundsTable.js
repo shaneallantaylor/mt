@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { RadioOption, SelectRadios } from '../styles';
 
 const BackgroundsTableHeader = styled.div`
@@ -60,6 +61,7 @@ export default function BackgroundsTable({
 }) {
   useEffect(() => {
     hydratePhotosToUpdate(photos);
+    // eslint-disable-next-line
   }, [photos]);
 
   const photoRows = photos?.map((photo) => (
@@ -132,3 +134,10 @@ export default function BackgroundsTable({
     </div>
   );
 }
+
+BackgroundsTable.propTypes = {
+  photos: PropTypes.array,
+  handleRadioChange: PropTypes.func,
+  photosBeingUpdated: PropTypes.object,
+  hydratePhotosToUpdate: PropTypes.func,
+};

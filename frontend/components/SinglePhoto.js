@@ -1,13 +1,15 @@
-import Image from 'next/image';
-import { useQuery } from '@apollo/client';
-import Head from 'next/head';
-import styled, { keyframes } from 'styled-components';
-import Link from 'next/link';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+import Image from 'next/image';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useQuery } from '@apollo/client';
+import styled, { keyframes } from 'styled-components';
 import { PHOTO_QUERY } from '../graphql/queries';
+import { slugify } from '../lib';
 import SVGLogo from './SVGLogo';
 
-const loading = keyframes`
+const loadingAni = keyframes`
 	0% {
 		background-position: 100% 50%;
 	}
@@ -57,7 +59,7 @@ const SingleImageLoader = styled.div`
     #e6e6e6
   );
   background-size: 400% 400%;
-  animation: ${loading} 4s ease forwards infinite;
+  animation: ${loadingAni} 4s ease forwards infinite;
 `;
 
 const SinglePhotoName = styled.h2`
@@ -120,16 +122,13 @@ export default function SinglePhoto({ id }) {
   const handleOnLoad = () => {
     setIsLoaded(true);
   };
-
-  if (loading) return <p>LOADING YOO</p>;
-  if (error) return <p>There was an error. Ooops!</p>;
-  // if (data === undefined) return null;
+  if (loading || error) return null;
   return (
     <PageContainer>
       <Head>
         <title>Megan Thompson | {data.photo.name}</title>
       </Head>
-      <Link href={`/gallery/${data.photo.gallery.name}`}>
+      <Link href={`/gallery/${slugify(data.photo.gallery.name)}`}>
         <CloseButton aria-label="Close">
           <SVGLogo />
         </CloseButton>
@@ -139,8 +138,6 @@ export default function SinglePhoto({ id }) {
         <SingleImageWrapper isLoaded={isLoaded}>
           <Image
             layout="fill"
-            // height="20"
-            // width="20"
             objectFit="contain"
             onLoad={handleOnLoad}
             unoptimized
@@ -158,3 +155,7 @@ export default function SinglePhoto({ id }) {
     </PageContainer>
   );
 }
+
+SinglePhoto.propTypes = {
+  id: PropTypes.string,
+};

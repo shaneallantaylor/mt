@@ -1,5 +1,6 @@
 import SortableList, { SortableItem } from 'react-easy-sort';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Button, NotPublishedBanner } from '../styles';
 
 const SortableStlyes = styled.div`
@@ -106,3 +107,9 @@ export default function EasySort({ photos, onSortEnd, handleRemovePhoto }) {
     </SortableStlyes>
   );
 }
+
+EasySort.propTypes = {
+  photos: PropTypes.array,
+  onSortEnd: PropTypes.func,
+  handleRemovePhoto: PropTypes.func,
+};

@@ -9,7 +9,6 @@ import {
   DELETE_PHOTO_MUTATION,
 } from '../graphql/mutations';
 import { PHOTO_QUERY } from '../graphql/queries';
-import WorkmodeContainer from './WorkmodeContainer';
 import WorkmodeNav from './WorkmodeNav';
 import {
   DestructiveButton,
@@ -17,6 +16,7 @@ import {
   RadioOption,
   SelectRadios,
   TextInput,
+  WorkmodeContainer,
 } from '../styles';
 import { renderSuccessToast } from './toasts';
 
@@ -40,15 +40,11 @@ export default function EditPhoto({ query: { photoId } }) {
   const [background, setBackground] = useState(data?.photo?.backgroundImage);
   const [status, setStatus] = useState(data?.photo?.status !== 'HIDDEN');
 
-  const [
-    updatePhoto,
-    { loading: mutationLoading, error: mutationError },
-  ] = useMutation(UPDATE_PHOTO_MUTATION);
+  const [updatePhoto, { loading: mutationLoading }] = useMutation(
+    UPDATE_PHOTO_MUTATION
+  );
 
-  const [
-    deletePhoto,
-    { loading: deleteLoading, error: deleteError },
-  ] = useMutation(DELETE_PHOTO_MUTATION);
+  const [deletePhoto] = useMutation(DELETE_PHOTO_MUTATION);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -67,8 +63,7 @@ export default function EditPhoto({ query: { photoId } }) {
       refetchQueries: [{ query: PHOTO_QUERY, variables: { id: photoId } }],
     });
     renderSuccessToast();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleDeletePhoto(e) {
