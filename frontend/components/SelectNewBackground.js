@@ -97,6 +97,6 @@ export default function SelectNewBackground({
 SelectNewBackground.propTypes = {
   handleNewBackgroundSelect: PropTypes.func,
   newBackground: PropTypes.string,
-  backgroundPhotos: PropTypes.array,
+  backgroundPhotos: PropTypes.object,
   open: PropTypes.bool,
 };

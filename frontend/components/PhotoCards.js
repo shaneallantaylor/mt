@@ -153,5 +153,5 @@ export default function PhotoCards({ allPhotos }) {
 }
 
 PhotoCards.propTypes = {
-  allPhotos: PropTypes.array,
+  allPhotos: PropTypes.object,
 };

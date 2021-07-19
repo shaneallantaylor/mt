@@ -47,7 +47,7 @@ const ChangeBackgroundToggle = styled.label`
 
 export default function EditAbout() {
   const aboutInput = useRef(null);
-  const [newBackground, setNewBackground] = useState({});
+  const [newBackground, setNewBackground] = useState('');
   const [checked, setChecked] = useState(false);
   const {
     data: aboutData,

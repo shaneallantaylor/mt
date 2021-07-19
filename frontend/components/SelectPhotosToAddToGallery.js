@@ -99,7 +99,7 @@ export default function SelectPhotosToAddToGallery({
 SelectPhotosToAddToGallery.propTypes = {
   handleSelect: PropTypes.func,
   selectedPhotos: PropTypes.object,
-  possiblePhotos: PropTypes.array,
+  possiblePhotos: PropTypes.object,
   handleAddPhotos: PropTypes.func,
   open: PropTypes.bool,
 };

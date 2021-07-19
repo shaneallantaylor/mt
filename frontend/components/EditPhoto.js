@@ -111,8 +111,8 @@ export default function EditPhoto({ query: { photoId } }) {
                 type="text"
                 id="name"
                 ref={nameInput}
-                disabled={loading.toString()}
-                aria-busy={loading.toString()}
+                disabled={loading}
+                aria-busy={loading}
                 defaultValue={data?.photo?.name}
               />
             </label>
@@ -124,8 +124,8 @@ export default function EditPhoto({ query: { photoId } }) {
                 type="text"
                 id="alt"
                 ref={altInput}
-                disabled={loading.toString()}
-                aria-busy={loading.toString()}
+                disabled={loading}
+                aria-busy={loading}
                 defaultValue={data?.photo?.altText}
               />
             </label>
@@ -137,8 +137,8 @@ export default function EditPhoto({ query: { photoId } }) {
                 type="text"
                 id="description"
                 ref={descriptionInput}
-                disabled={loading.toString()}
-                aria-busy={loading.toString()}
+                disabled={loading}
+                aria-busy={loading}
                 defaultValue={data?.photo?.description}
               />
             </label>
