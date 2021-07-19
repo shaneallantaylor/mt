@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router';
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -36,6 +37,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Noto Sans JP', sans-serif;
     color: var(--white);
     background: var(--white);
+    height: ${({ isAboutPage }) => (isAboutPage ? '100%' : undefined)};
   }
 
   #__next {
@@ -59,13 +61,14 @@ const MainStyles = styled.main`
   height: calc(100% - 65px);
   max-width: 100vw;
   overflow-x: hidden;
-  /* padding: 20px; */
 `;
 
 export default function Layout({ children }) {
+  const router = useRouter();
+  console.log('router is', router);
   return (
     <>
-      <GlobalStyles />
+      <GlobalStyles isAboutPage={router.pathname === '/about'} />
       <Header />
       <MainStyles>{children}</MainStyles>
       <ToastContainer
