@@ -1,13 +1,27 @@
 import PropTypes from 'prop-types';
 import styled, { createGlobalStyle } from 'styled-components';
+import { useRouter } from 'next/router';
+import { ToastContainer } from 'react-toastify';
 import Header from './Header';
+import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalStyles = createGlobalStyle`
   html {
+    height: 100%;
+    background: var(--black);
+
     --black: #000000;
-    --white: #ffffff;
+    --white: #f9f9f9;
     --gray: #f0f0f0;
-    --bs: 0 12px 24px 0 rgba(0, 0, 0, 0.9);
+    --primary: #65b7d3;
+    --headerbg: rgb(25,25,25);
+    --fsl: 2rem;
+    --fsxl: 2.5rem;
+    --fsxxl: 3rem;
+    --fsm: 1.2rem;
+    --fss: 0.8rem;
+    --fsxl: 0.5rem;
+    --bs: 2px 3px 4px 0 rgba(0,0,0,0.3);
     box-sizing: border-box;
   }
 
@@ -20,8 +34,14 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     font-size: 1.5rem;
     line-height: 2;
-    font-family: sans-serif;
+    font-family: 'Noto Sans JP', sans-serif;
     color: var(--white);
+    background: var(--white);
+    height: ${({ isWorkmodePage }) => (isWorkmodePage ? undefined : '100%')};
+  }
+
+  #__next {
+    height: 100%
   }
 
   a {
@@ -38,17 +58,24 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const MainStyles = styled.main`
+  height: calc(100% - 65px);
   max-width: 100vw;
   overflow-x: hidden;
-  padding: 20px;
 `;
 
 export default function Layout({ children }) {
+  const router = useRouter();
+
   return (
     <>
-      <GlobalStyles />
+      <GlobalStyles isWorkmodePage={router.pathname.includes('/workmode')} />
       <Header />
       <MainStyles>{children}</MainStyles>
+      <ToastContainer
+        pauseOnHover={false}
+        hideProgressBar
+        position="bottom-right"
+      />
     </>
   );
 }

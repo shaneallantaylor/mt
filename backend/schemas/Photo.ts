@@ -53,12 +53,12 @@ export const Photo = list({
   },
   hooks: {
     afterChange: (afterChangeProps) => {
-      // console.log(
-      //   'PHOTO HOOK: afterChangeProps fired and its args were',
-      //   afterChangeProps
-      // );
+      console.log(
+        'PHOTO HOOK: afterChangeProps fired and its args were',
+        afterChangeProps
+      );
       if (true) {
-        // console.log('true was true and you changed a PHOTO!');
+        console.log('true was true and you changed a PHOTO!');
       }
     },
     resolveInput: (resolveInputProps) => {

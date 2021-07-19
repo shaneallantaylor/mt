@@ -1,11 +1,22 @@
 import gql from 'graphql-tag';
 
-export const ALL_PHOTOS_QUERY = gql`
-  query ALL_PHOTOS_QUERY {
-    allPhotos {
-      id
-      description
-      name
+export const ABOUT_QUERY = gql`
+  query ABOUT_QUERY {
+    about: About(where: { id: "60d7a9cb3dcaf4174f345396" }) {
+      text
+      background {
+        image {
+          id
+          publicUrlTransformed
+        }
+      }
+    }
+  }
+`;
+
+export const ALL_HOMEPAGE_BACKGROUNDS_QUERY = gql`
+  query ALL_HOMEPAGE_BACKGROUNDS_QUERY {
+    backgroundPhotos: allPhotos(where: { backgroundImage: true }) {
       image {
         publicUrlTransformed
       }
@@ -13,9 +24,25 @@ export const ALL_PHOTOS_QUERY = gql`
   }
 `;
 
+export const ALL_PHOTOS_QUERY = gql`
+  query ALL_PHOTOS_QUERY {
+    allPhotos {
+      id
+      description
+      name
+      altText
+      status
+      backgroundImage
+      image {
+        publicUrlTransformed(transformation: { width: "400" })
+      }
+    }
+  }
+`;
+
 export const ALL_PUBLISHED_GALLERIES_QUERY = gql`
   query ALL_PUBLISHED_GALLERIES_QUERY {
-    allGalleries(where: { status_i: "Published" }, sortBy: name_ASC) {
+    allGalleries(where: { status_i: "Published" }, sortBy: order_ASC) {
       id
       description
       name
@@ -23,14 +50,28 @@ export const ALL_PUBLISHED_GALLERIES_QUERY = gql`
   }
 `;
 
-export const GALLERY_PHOTOS_BY_NAME_QUERY = gql`
-  query GALLERY_PHOTOS_BY_NAME_QUERY($galleryName: String!) {
-    allGalleries(where: { name_i: $galleryName }) {
-      photos {
+export const ALL_GALLERIES_QUERY = gql`
+  query ALL_GALLERIES_QUERY {
+    allGalleries(sortBy: name_ASC) {
+      id
+      description
+      status
+      name
+    }
+  }
+`;
+
+export const GALLERY_PHOTOS_BY_SLUG_QUERY = gql`
+  query GALLERY_PHOTOS_BY_SLUG_QUERY($gallerySlug: String!) {
+    allGalleries(where: { slug_i: $gallerySlug }) {
+      photos(where: { status_i: "Published" }, sortBy: order_ASC) {
         id
         name
         description
         altText
+        gallery {
+          name
+        }
         image {
           publicUrlTransformed
         }
@@ -71,8 +112,9 @@ export const GALLERY_QUERY_WITH_SORTED_PHOTOS = gql`
       name
       id
       order
+      status
       image {
-        publicUrlTransformed(transformation: { width: "200" })
+        publicUrlTransformed(transformation: { width: "400" })
       }
     }
   }
@@ -84,6 +126,8 @@ export const PHOTO_QUERY = gql`
       name
       description
       altText
+      status
+      backgroundImage
       gallery {
         name
       }
@@ -105,10 +149,10 @@ export const SEARCH_PHOTOS_QUERY = gql`
       }
     ) {
       id
-      description
       name
+      status
       image {
-        publicUrlTransformed
+        publicUrlTransformed(transformation: { width: "400" })
       }
     }
   }
@@ -123,6 +167,7 @@ export const GET_PHOTOS_WITH_NO_GALLERY = gql`
       name
       id
       order
+      status
       image {
         publicUrlTransformed
       }

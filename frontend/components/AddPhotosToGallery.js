@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledLabel = styled.label`
   display: inline-block;
@@ -50,7 +51,7 @@ export default function AddPhotosToGallery({
       <div>
         {possiblePhotos.possiblePhotos.map((photo) => (
           <StyledLabel key={`label-${photo.id}`} checked={checkboxes[photo.id]}>
-            <img alt={photo.name} src={photo.image.publicUrlTransformed} />
+            <img alt={photo.name} src={photo.image?.publicUrlTransformed} />
             <StyledCheckbox
               onInput={handleCheckboxInputChange}
               id={photo.id}
@@ -66,3 +67,10 @@ export default function AddPhotosToGallery({
     </div>
   );
 }
+
+AddPhotosToGallery.propTypes = {
+  handleAddPhotos: PropTypes.func,
+  handleCheckboxInputChange: PropTypes.func,
+  checkboxes: PropTypes.object,
+  possiblePhotos: PropTypes.array,
+};

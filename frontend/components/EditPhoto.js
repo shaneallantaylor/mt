@@ -1,15 +1,31 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import Button from './styles/Button';
+import styled from 'styled-components';
+import Button from '../styles/Button';
 import {
   UPDATE_PHOTO_MUTATION,
   DELETE_PHOTO_MUTATION,
 } from '../graphql/mutations';
 import { PHOTO_QUERY } from '../graphql/queries';
-import Loading from './Loading';
-import Error from './Error';
+import WorkmodeNav from './WorkmodeNav';
+import {
+  DestructiveButton,
+  FlexSpaceBetween,
+  RadioOption,
+  SelectRadios,
+  TextInput,
+  WorkmodeContainer,
+} from '../styles';
+import { renderSuccessToast } from './toasts';
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  margin-bottom: 40px;
+`;
 
 export default function EditPhoto({ query: { photoId } }) {
   const nameInput = useRef(null);
@@ -21,90 +37,173 @@ export default function EditPhoto({ query: { photoId } }) {
       id: photoId,
     },
   });
+  const [background, setBackground] = useState(data?.photo?.backgroundImage);
+  const [status, setStatus] = useState(data?.photo?.status !== 'HIDDEN');
 
-  const [
-    updatePhoto,
-    { loading: mutationLoading, error: mutationError },
-  ] = useMutation(UPDATE_PHOTO_MUTATION);
+  const [updatePhoto, { loading: mutationLoading }] = useMutation(
+    UPDATE_PHOTO_MUTATION
+  );
 
-  const [
-    deletePhoto,
-    { loading: deleteLoading, error: deleteError },
-  ] = useMutation(DELETE_PHOTO_MUTATION);
+  const [deletePhoto] = useMutation(DELETE_PHOTO_MUTATION);
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     const name = nameInput.current.value;
     const description = descriptionInput.current.value;
-    const altText = altInput.current.value;
+    const alt = altInput.current.value;
     await updatePhoto({
       variables: {
         id: photoId,
         name,
         description,
-        altText,
+        alt,
+        status: status ? 'PUBLISHED' : 'HIDDEN',
+        background,
       },
+      refetchQueries: [{ query: PHOTO_QUERY, variables: { id: photoId } }],
     });
-    // ! Add toast for success
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    renderSuccessToast();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  async function handleDeletePhoto() {
-    await deletePhoto({
-      variables: {
-        id: photoId,
-      },
-    });
-    router.replace('/workmode/photo');
-    console.log('you should leave now');
+  async function handleDeletePhoto(e) {
+    e.preventDefault();
+    if (window.confirm('Are you sure you want to delete the photo?')) {
+      await deletePhoto({
+        variables: {
+          id: photoId,
+        },
+      });
+      router.replace('/workmode/photo/all');
+    } else {
+      console.log('NVM, doing nothing');
+    }
   }
+
+  useEffect(() => {
+    setStatus(data?.photo?.status !== 'HIDDEN');
+  }, [data?.photo?.status]);
+
+  useEffect(() => {
+    setBackground(data?.photo?.backgroundImage);
+  }, [data?.photo?.backgroundImage]);
 
   if (error) return null;
   return (
-    <div style={{ color: 'black ' }}>
-      <Error content={mutationError || error} />
-      <Loading size="big" content={mutationLoading || loading} />
+    <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit Photo" />
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
-        <label>
-          Name
-          <input
-            ref={nameInput}
-            disabled={loading}
-            aria-busy={loading}
-            type="text"
-            defaultValue={data?.photo.name}
-          />
-        </label>
-        <label>
-          Description
-          <input
-            ref={descriptionInput}
-            type="text"
-            name="description"
-            defaultValue={data?.photo.description}
-          />
-        </label>
-        <label>
-          Alt Text
-          <input
-            ref={altInput}
-            type="text"
-            name="alt"
-            defaultValue={data?.photo.altText}
-          />
-        </label>
         <img
-          alt={data?.photo.altText}
+          style={{
+            maxWidth: '300px',
+            margin: '0 auto',
+            display: 'block',
+            marginBottom: '20px',
+          }}
+          alt="The thing you are editing"
           src={data?.photo.image.publicUrlTransformed}
         />
-        <Button type="submit">Save Changes</Button>
-        <button type="button" onClick={handleDeletePhoto}>
-          Delete this photo
-        </button>
+        <Grid>
+          <div>
+            <label htmlFor="name">
+              <div>Name</div>
+              <TextInput
+                type="text"
+                id="name"
+                ref={nameInput}
+                disabled={loading}
+                aria-busy={loading}
+                defaultValue={data?.photo?.name}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="alt">
+              <div>Alt Text</div>
+              <TextInput
+                type="text"
+                id="alt"
+                ref={altInput}
+                disabled={loading}
+                aria-busy={loading}
+                defaultValue={data?.photo?.altText}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="description">
+              <div>Description</div>
+              <TextInput
+                type="text"
+                id="description"
+                ref={descriptionInput}
+                disabled={loading}
+                aria-busy={loading}
+                defaultValue={data?.photo?.description}
+              />
+            </label>
+          </div>
+        </Grid>
+        <Grid>
+          <div>
+            <div>Status</div>
+            <SelectRadios>
+              <RadioOption selected={!status} htmlFor="status-hidden">
+                Hidden
+                <input
+                  type="radio"
+                  id="status-hidden"
+                  name="status"
+                  value="HIDDEN"
+                  onChange={() => setStatus(false)}
+                />
+              </RadioOption>
+              <RadioOption selected={status} htmlFor="status-pub">
+                Published
+                <input
+                  type="radio"
+                  id="status-pub"
+                  name="status"
+                  value="PUBLISHED"
+                  onChange={() => setStatus(true)}
+                />
+              </RadioOption>
+            </SelectRadios>
+          </div>
+          <div>
+            <div>Use as a Homepage Background?</div>
+            <SelectRadios>
+              <RadioOption selected={!background} htmlFor="background-nah">
+                Nope
+                <input
+                  type="radio"
+                  id="background-nah"
+                  name="background"
+                  value="nah"
+                  onChange={() => setBackground(false)}
+                />
+              </RadioOption>
+              <RadioOption selected={background} htmlFor="background-yeah">
+                Sure
+                <input
+                  type="radio"
+                  id="background-yeah"
+                  name="background"
+                  value="yeah"
+                  onChange={() => setBackground(true)}
+                />
+              </RadioOption>
+            </SelectRadios>
+          </div>
+        </Grid>
+        <FlexSpaceBetween>
+          <Button type="submit">Save Changes</Button>
+          <DestructiveButton type="button" onClick={handleDeletePhoto}>
+            Delete Photo
+          </DestructiveButton>
+        </FlexSpaceBetween>
       </form>
-    </div>
+    </WorkmodeContainer>
   );
 }
 

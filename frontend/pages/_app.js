@@ -5,10 +5,15 @@ import { ApolloProvider } from '@apollo/client';
 import Layout from '../components/Layout';
 
 import withData from '../lib/withData';
-import '../components/styles/nprogress.css';
+import '../styles/nprogress.css';
+
+function routeChangeComplete() {
+  NProgress.done();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeComplete', () => routeChangeComplete());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps, apollo }) {
@@ -16,7 +21,12 @@ function MyApp({ Component, pageProps, apollo }) {
     <ApolloProvider client={apollo}>
       <Layout>
         <Head>
-          <title>Next.js + MongoDB App</title>
+          <title>Megan Thompson Photography | meganpickturetaker</title>
+          <meta property="og:title" content="Megan Thompson Photography" />
+          <meta
+            property="og:description"
+            content="Megan Thompson works in Los Angeles, California. She dog person and available for creative assignment worldwide!"
+          />
         </Head>
         <Component {...pageProps} />
       </Layout>

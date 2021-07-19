@@ -1,43 +1,78 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { useRef, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import EasySort from './EasySort';
-import Button from './styles/Button';
-import { UPDATE_GALLERY_MUTATION } from '../graphql/mutations';
+import Button from '../styles/Button';
 import {
+  DELETE_GALLERY_MUTATION,
+  UPDATE_GALLERY_MUTATION,
+} from '../graphql/mutations';
+import {
+  ALL_GALLERIES_QUERY,
+  ALL_PUBLISHED_GALLERIES_QUERY,
   GALLERY_QUERY_WITH_SORTED_PHOTOS,
   GET_PHOTOS_WITH_NO_GALLERY,
 } from '../graphql/queries';
-import Loading from './Loading';
-import Error from './Error';
-import SelectRadios from './styles/SelectRadios';
-import AddPhotosToGallery from './AddPhotosToGallery';
+import SelectRadios from '../styles/SelectRadios';
+import WorkmodeNav from './WorkmodeNav';
+import SelectPhotosToAddToGallery from './SelectPhotosToAddToGallery';
+import { renderSuccessToast } from './toasts';
+import {
+  DestructiveButton,
+  FlexSpaceBetween,
+  RadioOption,
+  TextInput,
+  WorkmodeContainer,
+} from '../styles';
 
-const TextInputContainer = styled.div`
-  display: flex;
-  padding-bottom: 20px;
-  border-bottom: 2px solid black;
-  justify-content: space-evenly;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  margin-bottom: 40px;
 `;
 
-const PossiblePhotosContainer = styled.div`
-  background: green;
+const ChangeBackgroundContainer = styled.div`
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-bottom: ${({ open }) => (open ? '20px' : '0px')};
 `;
 
-const AddPhotosToggle = styled.span`
+const ChangeBackgroundToggle = styled.label`
+  cursor: pointer;
+  display: block;
+  position: relative;
+
   &:after {
     content: '<';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
     width: 20px;
     height: 20px;
+    transition: transform 0.5s ease;
+    transform: ${({ checked }) =>
+      checked ? 'rotate(-90deg) translate(-10px, -15px) ' : 'none'};
+  }
+
+  input {
+    border: 0px;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 `;
 
 export default function EditGallery({ query }) {
   const { galleryId } = query;
-  const nameInput = useRef(null);
-  const descriptionInput = useRef(null);
   const {
     data: queryData,
     error: queryError,
@@ -48,18 +83,21 @@ export default function EditGallery({ query }) {
     },
   });
 
-  const [
-    getPossiblePhotos,
-    {
-      data: possiblePhotos,
-      loading: possiblePhotosLoading,
-      error: possiblePhotosError,
-    },
-  ] = useLazyQuery(GET_PHOTOS_WITH_NO_GALLERY);
+  const { data: possiblePhotos, error: possiblePhotosError } = useQuery(
+    GET_PHOTOS_WITH_NO_GALLERY
+  );
 
   const [photoList, setPhotoList] = useState(queryData?.sortedPhotos);
-  const [status, setStatus] = useState(queryData?.gallery?.status);
-  const [checkboxes, setCheckboxes] = useState({});
+  const [status, setStatus] = useState(queryData?.gallery?.status !== 'HIDDEN');
+  const [selectedPhotos, setSelectedPhotos] = useState({});
+  const [addPhotosChecked, setAddPhotosChecked] = useState(false);
+  const nameInput = useRef(queryData?.gallery?.name);
+  const descriptionInput = useRef(null);
+  const router = useRouter();
+
+  function handleChangeBackgroundToggle(e) {
+    setAddPhotosChecked(e.target.checked);
+  }
 
   const onSortEnd = (oldIndex, newIndex) => {
     setPhotoList((array) => arrayMove(array, oldIndex, newIndex));
@@ -70,9 +108,10 @@ export default function EditGallery({ query }) {
     { loading: mutationLoading, error: mutationError },
   ] = useMutation(UPDATE_GALLERY_MUTATION);
 
-  function handleStatusChange(e) {
-    setStatus(e.target.value);
-  }
+  const [
+    deleteGallery,
+    { loading: deleteLoading, error: deleteError },
+  ] = useMutation(DELETE_GALLERY_MUTATION);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -88,23 +127,33 @@ export default function EditGallery({ query }) {
         order: idx,
       },
     }));
+
     await updateGallery({
       variables: {
         galleryId,
         galleryName,
         galleryDescription,
-        galleryStatus: status,
+        galleryStatus: status ? 'PUBLISHED' : 'HIDDEN',
         photosToConnect,
         photosWithOrder,
       },
+      refetchQueries: [
+        {
+          query: GALLERY_QUERY_WITH_SORTED_PHOTOS,
+          variables: {
+            id: galleryId,
+          },
+        },
+        { query: ALL_PUBLISHED_GALLERIES_QUERY },
+      ],
     });
-    // ! Add toast for success
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    renderSuccessToast();
+    setAddPhotosChecked(false);
   }
 
-  function handleAddPhotos() {
-    const checkedPhotos = Object.entries(checkboxes)
+  function handleAddPhotos(e) {
+    e.preventDefault();
+    const checkedPhotos = Object.entries(selectedPhotos)
       .filter(([_, { checked }]) => checked === true)
       .map(([_, { photo }]) => photo);
     const newPhotoList = [...checkedPhotos, ...photoList];
@@ -112,17 +161,15 @@ export default function EditGallery({ query }) {
   }
 
   function handleRemovePhoto(e) {
-    console.log('e.target.dataset.idx', e.target.dataset.idx);
     const index = parseInt(e.target.dataset.idx);
     const newPhotoList = [...photoList];
     newPhotoList.splice(index, 1);
     setPhotoList(newPhotoList);
-    console.log('you attemped to remove');
   }
 
-  function handleCheckboxInputChange(e) {
-    setCheckboxes({
-      ...checkboxes,
+  function handleSelect(e) {
+    setSelectedPhotos({
+      ...selectedPhotos,
       [e.target.id]: {
         checked: e.target.checked,
         photo: JSON.parse(e.target.dataset.photo),
@@ -130,79 +177,116 @@ export default function EditGallery({ query }) {
     });
   }
 
-  return (
-    <div style={{ color: 'black ' }}>
-      <Error content={mutationError || queryError || possiblePhotosError} />
-      <Loading size="big" content={mutationLoading || queryLoading} />
-      <form onSubmit={handleSubmit} disabled={mutationLoading}>
-        <TextInputContainer>
-          <label htmlFor="name">
-            Name
-            <input
-              ref={nameInput}
-              disabled={queryLoading}
-              aria-busy={queryLoading}
-              id="name"
-              name="name"
-              defaultValue={queryData?.gallery.name}
-            />
-          </label>
-          <label htmlFor="description">
-            Description
-            <input
-              ref={descriptionInput}
-              type="text"
-              id="description"
-              name="description"
-              defaultValue={queryData?.gallery.description}
-            />
-          </label>
-          <SelectRadios>
-            <label htmlFor="status-hidden">
-              Hidden
-              <input
-                type="radio"
-                id="status-hidden"
-                name="status-hidden"
-                value="HIDDEN"
-                checked={status === 'HIDDEN'}
-                onChange={handleStatusChange}
-              />
-            </label>
-            <label htmlFor="status-pub">
-              Published
-              <input
-                type="radio"
-                id="status-pub"
-                name="status-pub"
-                value="PUBLISHED"
-                checked={status === 'PUBLISHED'}
-                onChange={handleStatusChange}
-              />
-            </label>
-          </SelectRadios>
-        </TextInputContainer>
+  async function handleDeleteGallery(e) {
+    e.preventDefault();
+    if (window.confirm('Are you sure you want to delete the gallery?')) {
+      await deleteGallery({
+        variables: {
+          id: galleryId,
+        },
+        refetchQueries: [{ query: ALL_GALLERIES_QUERY }],
+      });
+      router.replace('/workmode/gallery');
+    } else {
+      console.log('NVM, doing nothing');
+    }
+  }
 
-        <PossiblePhotosContainer>
-          <AddPhotosToggle role="button" onClick={getPossiblePhotos}>
+  useEffect(() => {
+    setPhotoList(queryData?.sortedPhotos);
+  }, [queryData?.sortedPhotos]);
+
+  useEffect(() => {
+    setStatus(queryData?.gallery?.status !== 'HIDDEN');
+  }, [queryData?.gallery?.status]);
+
+  return (
+    <WorkmodeContainer>
+      <WorkmodeNav pageTitle="Edit Gallery" />
+      <form onSubmit={handleSubmit} disabled={mutationLoading}>
+        <Grid>
+          <div>
+            <label htmlFor="title">
+              <div>Name</div>
+              <TextInput
+                type="text"
+                id="title"
+                ref={nameInput}
+                disabled={mutationLoading}
+                aria-busy={mutationLoading}
+                defaultValue={queryData?.gallery?.name}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="description">
+              <div>Description</div>
+              <TextInput
+                type="text"
+                id="description"
+                ref={descriptionInput}
+                disabled={mutationLoading}
+                aria-busy={mutationLoading}
+                defaultValue={queryData?.gallery?.description}
+              />
+            </label>
+          </div>
+          <div>
+            <div>Status</div>
+            <SelectRadios>
+              <RadioOption selected={!status} htmlFor="status-hidden">
+                Hidden
+                <input
+                  type="radio"
+                  id="status-hidden"
+                  name="status"
+                  value="HIDDEN"
+                  onChange={() => setStatus(false)}
+                />
+              </RadioOption>
+              <RadioOption selected={status} htmlFor="status-pub">
+                Published
+                <input
+                  type="radio"
+                  id="status-pub"
+                  name="status"
+                  value="PUBLISHED"
+                  onChange={() => setStatus(true)}
+                />
+              </RadioOption>
+            </SelectRadios>
+          </div>
+        </Grid>
+        <ChangeBackgroundContainer open={addPhotosChecked}>
+          <ChangeBackgroundToggle
+            htmlFor="background-toggle"
+            checked={addPhotosChecked}
+            onInput={handleChangeBackgroundToggle}
+          >
             Add Photos
-          </AddPhotosToggle>
-          <AddPhotosToGallery
-            handleCheckboxInputChange={handleCheckboxInputChange}
-            handleAddPhotos={handleAddPhotos}
-            checkboxes={checkboxes}
+            <input id="background-toggle" type="checkbox" />
+          </ChangeBackgroundToggle>
+          <SelectPhotosToAddToGallery
+            open={addPhotosChecked}
+            handleSelect={handleSelect}
+            selectedPhotos={selectedPhotos}
             possiblePhotos={possiblePhotos}
+            handleAddPhotos={handleAddPhotos}
           />
-        </PossiblePhotosContainer>
+        </ChangeBackgroundContainer>
         <EasySort
           onSortEnd={onSortEnd}
           photos={photoList}
           handleRemovePhoto={handleRemovePhoto}
         />
-
-        <Button type="submit">Save Changes</Button>
+        <FlexSpaceBetween>
+          <Button type="submit">Save Changes</Button>
+          <DestructiveButton type="button" onClick={handleDeleteGallery}>
+            Delete Gallery
+          </DestructiveButton>
+        </FlexSpaceBetween>
       </form>
-    </div>
+    </WorkmodeContainer>
   );
 }
 
