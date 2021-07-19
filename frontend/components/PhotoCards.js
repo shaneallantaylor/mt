@@ -19,6 +19,23 @@ const Card = styled.div`
   height: 400px;
   border-radius: 4px;
   justify-self: center;
+  position: relative;
+  padding-bottom: 20px;
+  border: 5px solid ${({ published }) => (published ? '#d9f1d9' : '#ffd2d2')};
+
+  &:after {
+    content: '${({ published }) =>
+      published ? 'Published' : 'Not Published'}';
+    position: absolute;
+    height: 15px;
+    width: 80%;
+    border-top-right-radius: 70px;
+    bottom: 0;
+    font-size: 0.5rem;
+    background: ${({ published }) => (published ? '#d9f1d9' : '#ffd2d2')};
+    margin: 0;
+    padding-left: 8px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -101,7 +118,10 @@ export default function PhotoCards({ allPhotos }) {
   }
 
   const photoCards = photos.map((photo) => (
-    <Card key={`photo-card-${photo.id}`}>
+    <Card
+      key={`photo-card-${photo.id}`}
+      published={photo.status === 'PUBLISHED'}
+    >
       <ImageContainer>
         <img src={photo.image.publicUrlTransformed} alt={photo.altText} />
       </ImageContainer>
