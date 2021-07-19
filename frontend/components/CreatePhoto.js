@@ -159,7 +159,7 @@ export default function CreatePhoto() {
             </SelectRadios>
           </div>
         </Grid>
-        <Button loading={loading} type="submit">
+        <Button loading={loading.toString()} type="submit">
           {loading ? 'Working...' : 'Create Photo'}
         </Button>
       </form>

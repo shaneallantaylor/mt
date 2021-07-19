@@ -224,8 +224,8 @@ export default function EditGallery({ query }) {
                 type="text"
                 id="title"
                 ref={nameInput}
-                disabled={mutationLoading}
-                aria-busy={mutationLoading}
+                disabled={mutationLoading.toString()}
+                aria-busy={mutationLoading.toString()}
                 defaultValue={queryData?.gallery?.name}
               />
             </label>
@@ -237,8 +237,8 @@ export default function EditGallery({ query }) {
                 type="text"
                 id="description"
                 ref={descriptionInput}
-                disabled={mutationLoading}
-                aria-busy={mutationLoading}
+                disabled={mutationLoading.toString()}
+                aria-busy={mutationLoading.toString()}
                 defaultValue={queryData?.gallery?.description}
               />
             </label>

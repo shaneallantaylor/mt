@@ -27,6 +27,8 @@ export default function Home() {
   if (loading) return null;
   const shuffledArray = shuffleArray(data.backgroundPhotos);
   return (
-    <HomeStyles backgroundImage={shuffledArray[0].image.publicUrlTransformed} />
+    <HomeStyles
+      backgroundImage={shuffledArray[0]?.image.publicUrlTransformed}
+    />
   );
 }

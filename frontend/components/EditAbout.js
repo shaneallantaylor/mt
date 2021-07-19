@@ -137,7 +137,7 @@ export default function EditAbout() {
             backgroundPhotos={backgroundPhotos}
           />
         </ChangeBackgroundContainer>
-        <Button loading={mutationLoading} type="submit">
+        <Button loading={mutationLoading.toString()} type="submit">
           {mutationLoading ? 'Working...' : 'Save Changes'}
         </Button>
       </form>

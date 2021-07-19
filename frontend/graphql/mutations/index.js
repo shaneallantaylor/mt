@@ -76,6 +76,19 @@ export const UPDATE_PHOTO_MUTATION = gql`
   }
 `;
 
+export const UPDATE_HOMEPAGE_BACKGROUNDS = gql`
+  mutation UPDATE_HOMEPAGE_BACKGROUNDS(
+    $photosWithBackgroundStatus: [PhotosUpdateInput]
+  ) {
+    updatePhotos(data: $photosWithBackgroundStatus) {
+      id
+      name
+      status
+      backgroundImage
+    }
+  }
+`;
+
 export const DELETE_PHOTO_MUTATION = gql`
   mutation DELETE_PHOTO_MUTATION($id: ID!) {
     deletePhoto(id: $id) {

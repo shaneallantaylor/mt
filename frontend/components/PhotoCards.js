@@ -101,7 +101,7 @@ export default function PhotoCards({ allPhotos }) {
   }
 
   const photoCards = photos.map((photo) => (
-    <Card>
+    <Card key={`photo-card-${photo.id}`}>
       <ImageContainer>
         <img src={photo.image.publicUrlTransformed} alt={photo.altText} />
       </ImageContainer>

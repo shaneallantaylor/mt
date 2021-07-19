@@ -1,7 +1,7 @@
 import SelectPhotoToEdit from '../../../components/SelectPhotoToEdit';
 import PleaseSignIn from '../../../components/PleaseSignIn';
 
-export default function AddPhotoPage() {
+export default function AllPhotosPage() {
   return (
     <>
       <PleaseSignIn>

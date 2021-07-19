@@ -31,8 +31,10 @@ export const ALL_PHOTOS_QUERY = gql`
       description
       name
       altText
+      status
+      backgroundImage
       image {
-        publicUrlTransformed
+        publicUrlTransformed(transformation: { width: "400" })
       }
     }
   }

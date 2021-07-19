@@ -106,7 +106,7 @@ export default function CreateGallery() {
             />
           </label>
         </div>
-        <Button loading={loading} type="submit">
+        <Button loading={loading.toString()} type="submit">
           {loading ? 'Working...' : 'Create Gallery'}
         </Button>
       </form>

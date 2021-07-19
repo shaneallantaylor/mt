@@ -83,10 +83,10 @@ export default function WorkmodeHome() {
           </Link>
         </WorkItem>
         <WorkItem>
-          <Link href="/workmode/photo/add">
+          <Link href="/workmode/photo/create">
             <WorkCard>
               <CardContentContainer>
-                <h6>Add Photo</h6>
+                <h6>Create Photo</h6>
                 <p>Make a new photo appear on the site!</p>
               </CardContentContainer>
               <RightCaret />
@@ -122,7 +122,7 @@ export default function WorkmodeHome() {
           </Link>
         </WorkItem>
         <WorkItem>
-          <Link href="/workmode/gallery">
+          <Link href="/workmode/homepage-backgrounds">
             <WorkCard>
               <CardContentContainer>
                 <h6>Edit Homepage Background(s)</h6>

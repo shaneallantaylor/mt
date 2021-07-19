@@ -66,7 +66,7 @@ export default function EditNavigation() {
       </Instructions>
       <form onSubmit={handleSubmit} disabled={mutationLoading}>
         <EasySortNav onSortEnd={onSortEnd} navItems={navList} />
-        <Button loading={mutationLoading} type="submit">
+        <Button loading={mutationLoading.toString()} type="submit">
           {mutationLoading ? 'Working...' : 'Save Changes'}
         </Button>
       </form>

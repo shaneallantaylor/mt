@@ -7,8 +7,13 @@ import Layout from '../components/Layout';
 import withData from '../lib/withData';
 import '../styles/nprogress.css';
 
+function routeChangeComplete() {
+  NProgress.done();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeComplete', () => routeChangeComplete());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps, apollo }) {

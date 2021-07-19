@@ -3,18 +3,19 @@ import styled from 'styled-components';
 const Button = styled.button`
   align-items: center;
   border-style: solid;
-  cursor: ${({ loading }) => (loading ? 'not-allowed' : 'pointer')};
+  cursor: ${({ loading }) => (loading === 'true' ? 'not-allowed' : 'pointer')};
   display: inline-flex;
   flex-shrink: 0;
   justify-content: center;
   outline: 0;
   position: relative;
   white-space: nowrap;
-  background-color: ${({ loading }) => (loading ? '#d8d8d8' : '#3984f3')};
+  background-color: ${({ loading }) =>
+    loading === 'true' ? '#d8d8d8' : '#3984f3'};
   border-color: transparent;
   border-radius: 6px;
   border-width: 1px;
-  color: ${({ loading }) => (loading ? 'var(--white)' : '#ffffff')};
+  color: ${({ loading }) => (loading === 'true' ? 'var(--white)' : '#ffffff')};
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 1rem;
   font-weight: 500;

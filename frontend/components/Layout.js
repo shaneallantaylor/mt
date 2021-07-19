@@ -29,8 +29,6 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    overflow: hidden;
-    height: 100%;
     padding: 0;
     margin: 0;
     font-size: 1.5rem;
