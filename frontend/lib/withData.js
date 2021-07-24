@@ -33,10 +33,7 @@ function createClient({ headers, initialState }) {
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
-          fields: {
-            // TODO: We will add this together!
-            // allProducts: paginationField(),
-          },
+          fields: {},
         },
       },
     }).restore(initialState || {}),
