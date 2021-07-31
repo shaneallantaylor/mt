@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const NavContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ isSignIn }) => (isSignIn ? 'center' : 'space-between')};
   align-items: center;
   padding-top: 30px;
 
@@ -19,15 +19,20 @@ const Headline = styled.h2`
   padding: 0;
 `;
 
-export default function WorkmodeNav({ pageTitle }) {
+export default function WorkmodeNav({ pageTitle, isSignIn }) {
   return (
-    <NavContainer>
+    <NavContainer isSignIn={isSignIn}>
       <Headline>{pageTitle}</Headline>
-      <Link href="/workmode">←🧪🥼🧪</Link>
+      {!isSignIn && <Link href="/workmode">←🧪🥼🧪</Link>}
     </NavContainer>
   );
 }
 
+WorkmodeNav.defaultProps = {
+  isSignIn: false,
+};
+
 WorkmodeNav.propTypes = {
   pageTitle: PropTypes.string,
+  isSignIn: PropTypes.bool,
 };

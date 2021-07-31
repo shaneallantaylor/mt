@@ -17,7 +17,6 @@ export const cloudinary = {
 };
 
 export const Photo = list({
-  // access
   fields: {
     name: text({
       isRequired: true,
@@ -50,26 +49,5 @@ export const Photo = list({
       many: false,
       ui: { labelField: 'helper' },
     }),
-  },
-  hooks: {
-    afterChange: (afterChangeProps) => {
-      console.log(
-        'PHOTO HOOK: afterChangeProps fired and its args were',
-        afterChangeProps
-      );
-      if (true) {
-        console.log('true was true and you changed a PHOTO!');
-      }
-    },
-    resolveInput: (resolveInputProps) => {
-      // console.log('IN PHOTO HOOK: resolveInputProps is', resolveInputProps);
-      if (resolveInputProps.resolvedData.photos) {
-        // console.log(
-        //   'you changed the photos! Here are their IDs',
-        //   resolveInputProps.resolvedData.photos
-        // );
-      }
-      return resolveInputProps.resolvedData;
-    },
   },
 });

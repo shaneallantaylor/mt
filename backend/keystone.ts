@@ -14,8 +14,10 @@ import { insertSeedData } from './seed-data';
 const databaseUrl = process.env.MONGODB_URI;
 
 const sessionConfig = {
-  maxAge: 60 * 60 * 24 * 360, // how long should they stay signed in!
+  maxAge: 60 * 60 * 24 * 360,
   secret: process.env.SESSION_SECRET,
+  secure: true,
+  sameSite: 'none',
 };
 
 const { withAuth } = createAuth({
@@ -24,7 +26,6 @@ const { withAuth } = createAuth({
   secretField: 'password',
   initFirstItem: {
     fields: ['name', 'email', 'password'],
-    // todo add roles!
   },
 });
 
@@ -39,7 +40,6 @@ export default withAuth(
     db: {
       adapter: 'mongoose',
       url: databaseUrl,
-      // TODO: Add data seeding here
       async onConnect(keystone) {
         console.log('connected to the db');
         if (process.argv.includes('--seed-data')) {
