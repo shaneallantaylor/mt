@@ -36,6 +36,7 @@
     ]
   },
   "dependencies": {
+    "@hapi/iron": "^5.1.4",
     "@keystone-next/admin-ui": "^8.0.1",
     "@keystone-next/auth": "^14.0.0",
     "@keystone-next/cloudinary": "^2.0.9",
@@ -43,6 +44,7 @@
     "@keystone-next/keystone": "^9.3.0",
     "@keystone-next/types": "^12.0.0",
     "@keystonejs/server-side-graphql-client": "^1.1.2",
+    "cookie": "^0.4.1",
     "dotenv": "^8.2.0",
     "next": "^10.0.5",
     "react": "^16.14.0",
