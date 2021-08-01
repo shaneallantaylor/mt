@@ -1,10 +1,8 @@
 import 'dotenv/config';
 import { createAuth } from '@keystone-next/auth';
 import { config, createSchema } from '@keystone-next/keystone/schema';
-import {
-  withItemData,
-  statelessSessions,
-} from '@keystone-next/keystone/session';
+import { withItemData } from '@keystone-next/keystone/session';
+import { statelessSessions } from './stateless.js'
 import { Gallery } from './schemas/Gallery';
 import { User } from './schemas/User';
 import { Photo } from './schemas/Photo';
